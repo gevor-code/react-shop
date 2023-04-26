@@ -44,13 +44,6 @@
         background: #274C5B;
         border-radius: 16px;
     }
-    .topContainer {
-        display: flex;
-        flex-direction: column;
-    }
-    .mainContainer {
-        display: flex;
-        flex-direction: row;
-    }
+
 
 }

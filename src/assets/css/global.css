@@ -1,4 +1,4 @@
-.main-container{
+.main-container {
     max-width: 1400px;
     padding-left: 64px;
     padding-right: 64px;
@@ -6,25 +6,61 @@
 }
 
 @media (max-width: 1400px) {
-    .main-container{
+    .main-container {
         max-width: 100%;
     }
 }
 
 @media (max-width: 991px) {
-    .main-container{
+    .main-container {
         padding-left: 32px;
         padding-right: 32px;
     }
 }
 
 @media (max-width: 600px) {
-    .main-container{
+    .main-container {
         padding-left: 16px;
         padding-right: 16px;
     }
 }
 
-.text-h1{
+.text-h1 {
 
 }
+
+.header-container {
+    max-width: 1600px;
+    padding-left: 64px;
+    padding-right: 64px;
+    margin: 0 auto;
+}
+
+@media (max-width: 1600px) {
+    .header-container {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 991px) {
+    .header-container {
+        padding-left: 32px;
+        padding-right: 32px;
+    }
+}
+
+@media (max-width: 600px) {
+    .header-container {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+}
+
+.bg-footer {
+    background-image: url("../svg/footer.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    border-radius: 30px;
+}
+

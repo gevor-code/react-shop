@@ -11,21 +11,25 @@ module.exports = {
                 text: "#274C5B",
                 semiWhite: "#FAFAFA",
                 lightGreen: "#7EB693",
-                border:"#E0E0E0"
+                border: "#E0E0E0"
             },
             height: {
                 header: "204px",
                 input: "66px",
-                circle:"56px"
+                circle: "56px",
+                input2: "40px",
+                circle2: "30px"
             },
             borderRadius: {
                 md: "36px",
                 brFull: "50%",
             },
             width: {
-                input: "376px",
-                circle:"56px",
+                input: "350px",
+                circle: "56px",
                 w1: "160px",
+                input2: "200px",
+                circle2: "30px"
             },
             fontSize: {
                 large: ["2.37rem"],

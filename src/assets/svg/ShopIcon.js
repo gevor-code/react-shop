@@ -3,7 +3,7 @@ import React from "react";
 function ShopIcon() {
     return (
         <svg
-            width="57"
+            width="49"
             height="56"
             viewBox="0 0 57 56"
             fill="none"

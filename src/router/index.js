@@ -7,7 +7,9 @@ import React from "react";
 export const router = createBrowserRouter(
     createRoutesFromElements(
         <>
-            <Route path='/' element={<Home/>} />
+            <Route path='/' element={<Home/>}>
+
+            </Route>
             <Route path='*' element={<h1 className={"text2 red"}>Page not found</h1>}/>
         </>
     )

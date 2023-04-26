@@ -3,7 +3,7 @@ import React from "react";
 function SearchIcon() {
     return (
         <svg
-            width="22"
+            width="49"
             height="21"
             viewBox="0 0 22 21"
             fill="none"

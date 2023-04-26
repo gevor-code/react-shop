@@ -8,13 +8,7 @@ const Home = () => {
     return (
         <main>
             <Header/>
-            <FirstComponent/>
-            {/*<div className="main-container">*/}
-            {/*    <div className="flex gap-x-2 sm:gap-x-4">*/}
-            {/*        <span>fdsfdsfdsf</span>*/}
-            {/*        <span>fdsfdsfdsf</span>*/}
-            {/*    </div>*/}
-            {/*</div>*/}
+            {/*<FirstComponent/>*/}
             <Footer/>
         </main>
     );
