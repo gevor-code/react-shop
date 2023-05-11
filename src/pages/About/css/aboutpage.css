@@ -1,0 +1,18 @@
+.bgAbout{
+    background-image: url("../../../../public/assets/images/aboutbg.svg");
+    background-size: cover;
+
+}
+.bgSalad{
+    background-image: url("../../../../public/assets/images/salad.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size:cover;
+    height: 600px;
+}
+@media (max-width: 600px) {
+    .bgSalad{
+        height: 300px;
+        border-radius: 2rem;
+    }
+}
