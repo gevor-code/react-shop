@@ -22,8 +22,8 @@ export const router = createBrowserRouter(
             <Route path="signin" element={<Layout><SignIn/></Layout>} />
             <Route path="signup" element={<Layout><SignUp/></Layout>} />
             <Route path="admin" element={<Admin/>}/>
-            <Route path="admin/create-category" element={<Category/>}/>
-            <Route path="admin/create-product" element={<Product/>}/>
+            <Route path="admin/categories" element={<Category/>}/>
+            <Route path="admin/products" element={<Product/>}/>
             <Route path="admin/category-list" element={<CategoryList/>}/>
             <Route path="admin/products" element={<Products/>}/>
 

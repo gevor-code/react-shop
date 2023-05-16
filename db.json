@@ -10,7 +10,7 @@
       "role": "admin"
     }
   ],
-  "create-category": [
+  "categories": [
     {
       "category": "fruit",
       "id": "c2ca9cb2-d59d-46e8-b88a-14ac6c6e33a6"
@@ -18,9 +18,13 @@
     {
       "category": "vegetable",
       "id": "34629055-30f5-405d-b27d-ecd9697cffdf"
+    },
+    {
+      "category": "meat",
+      "id": "0d677a92-f926-4a12-b1a9-76c08a546761"
     }
   ],
-  "create-product": [
+  "products": [
     {
       "product": "Potato",
       "price": "250",
@@ -30,6 +34,11 @@
       "product": "Avocado",
       "price": "560",
       "id": "c81ee426-0968-466b-8292-ffa561d42a1f"
+    },
+    {
+      "product": "Chicken",
+      "price": "600",
+      "id": "df4d4273-b6fd-40f9-9f58-e3964ff15e1c"
     }
   ]
 }
