@@ -1,11 +1,32 @@
-import React, {useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Link} from "react-router-dom";
 import HeaderLogo from "../../assets/svg/HeaderLogo";
+import {useCookies} from "react-cookie";
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
     const [isOpen, setIsOpen] = useState(false);
+    const divRef = useRef(null);
+    const [cookies, removeCookie] = useCookies(['userData'])
+
+    const logout = () => {
+        removeCookie('userData')
+    }
+
+    useEffect(() => {
+        document.addEventListener('click', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
+    }, []);
+
+    const handleClickOutside = (event) => {
+        if (divRef.current && !divRef.current.contains(event.target)) {
+            setIsOpen(false);
+        }
+    };
 
     const toggleOpen = () => {
         setIsOpen(!isOpen);
@@ -42,7 +63,9 @@ const Navbar = () => {
                                     <li className="mx-4 my-6 md:my-0"><Link to="/about"
                                                                             className="text-medium font-bold text-xl text-text hover:text-cyan-500 duration-500">About</Link>
                                     </li>
-                                    <li className="mx-4 my-6 md:my-0"><Link to="/shop" className="text-medium font-bold text-xl text-text hover:text-cyan-500 duration-500">Shop</Link></li>
+                                    <li className="mx-4 my-6 md:my-0"><Link to="/shop"
+                                                                            className="text-medium font-bold text-xl text-text hover:text-cyan-500 duration-500">Shop</Link>
+                                    </li>
 
 
                                 </ul>
@@ -50,22 +73,46 @@ const Navbar = () => {
                             </div>
 
                             <div className="flex justify-center items-center">
-                                <div onClick={toggleOpen}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                         strokeWidth="2" stroke="currentColor" aria-hidden="true"
-                                         className="flex-shrink-0 h-[2rem] w-[2rem] text-hyugapurple-500 group-hover:text-hyugayellow-900">
-                                        <path strokeLinecap="round" strokeLinejoin="round"
-                                              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                                    </svg>
-                                    {isOpen && (
-                                        <div
-                                            className="flex items-center static  absolute py-[4px] px-[4rem] sm:py-[6px] sm:px-[4rem] md:py-[6px] md:px-[4rem] lg:py-[23px] lg:px-[4rem] xl:py-[23px] xl:px-[4rem] 2xl:py-[23px] 2xl:px-[4rem] rounded-xl bg-border opacity-100 z-10 right-[28%] top-[89px] sm:right-[34%] sm:top-[100px]  md:right-[66%] md:top-[173px] lg:right-[22%] lg:top-[100px] xl:right-[18%] xl:top-[100px] 2xl:right-[18%] 2xl:top-[100px] bg-semiWhite">
-                                            <div className="flex flex-col uppercase">
-                                                <li className="mx-4 my-6 md:my-0 list-none"><Link to="/signin" className=" hover:text-cyan-500 duration-500 font-[Roboto] font-extrabold text-[#274c5b] text-[24px] italic">Sign In</Link></li>
-                                                <li className="mx-4 my-6 md:my-0 list-none"><Link to="/signup" className="hover:text-cyan-500 duration-500 font-[Roboto] font-extrabold text-[#274c5b] text-[24px] italic">Sign Up</Link></li>
+                                <div ref={divRef}>
+                                    <div onClick={toggleOpen}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                             strokeWidth="2" stroke="currentColor" aria-hidden="true"
+                                             className="flex-shrink-0 h-[2rem] w-[2rem] text-hyugapurple-500 group-hover:text-hyugayellow-900">
+                                            <path strokeLinecap="round" strokeLinejoin="round"
+                                                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                        </svg>
+
+
+                                        {isOpen
+                                            ?
+                                            cookies.userData !== 'undefined' ? (
+                                                <div
+                                                    className="flex items-center static  absolute py-[4px] px-[2rem] sm:py-[6px] sm:px-[4rem] md:py-[6px] md:px-[4rem] lg:py-[23px] lg:px-[4rem] xl:py-[23px] xl:px-[4rem] 2xl:py-[23px] 2xl:px-[4rem] rounded-xl bg-border opacity-100 z-10 right-[28%] top-[89px] sm:right-[34%] sm:top-[100px]  md:right-[60%] md:top-[173px] lg:right-[22%] lg:top-[100px] xl:right-[18%] xl:top-[100px] 2xl:right-[18%] 2xl:top-[100px] bg-semiWhite">
+
+                                                    <div className="m-4 flex flex-col  sm:gap-2 md:gap-0 lg:gap-2 xl:gap-4">
+                                                        <p className="text-medium font-bold md:text-[16px] lg:text-xl xl:text-xl text-text">
+                                                            {cookies.userData.firstname} {cookies.userData.lastname}
+                                                        </p>
+                                                        <button className="text-text ml-2" onClick={()=>logout()}>Logout</button>
+                                                    </div>
+                                                </div>
+
+                                                ) : <div
+                                                className="flex items-center static  absolute py-[4px] px-[4rem] sm:py-[6px] sm:px-[4rem] md:py-[6px] md:px-[4rem] lg:py-[23px] lg:px-[4rem] xl:py-[23px] xl:px-[4rem] 2xl:py-[23px] 2xl:px-[4rem] rounded-xl bg-border opacity-100 z-10 right-[28%] top-[89px] sm:right-[34%] sm:top-[100px]  md:right-[66%] md:top-[173px] lg:right-[22%] lg:top-[100px] xl:right-[18%] xl:top-[100px] 2xl:right-[18%] 2xl:top-[100px] bg-semiWhite">
+                                                <ul className="flex flex-col uppercase">
+                                                    <li className="mx-4 my-6 md:my-0 list-none"><Link to="/signin"
+                                                                                                      className=" hover:text-cyan-500 duration-500 font-[Roboto] font-extrabold text-[#274c5b] text-[24px] italic">Sign
+                                                        In</Link></li>
+                                                    <li className="mx-4 my-6 md:my-0 list-none"><Link to="/signup"
+                                                                                                      className="hover:text-cyan-500 duration-500 font-[Roboto] font-extrabold text-[#274c5b] text-[24px] italic">Sign
+                                                        Up</Link></li>
+                                                </ul>
                                             </div>
-                                        </div>
-                                    )}
+
+
+                                            : null
+                                        }
+                                    </div>
                                 </div>
                                 <div className="flex justify-end relative items-center">
                                     <input
@@ -88,6 +135,7 @@ const Navbar = () => {
 
                             </div>
                         </div>
+
                     </nav>
                 </div>
             </div>

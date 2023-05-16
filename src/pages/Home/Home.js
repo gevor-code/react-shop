@@ -19,28 +19,10 @@ const Home = () => {
             <FirstComponent/>
             <SecondComponent/>
             <ThirdComponent/>
-                <FourComponent/>
-
-            {/* responsive chi kdzes */}
-            {/*        <FifthComponent/>*/}
-            {/*responsive chi kdzes*/}
-
-
+            <FourComponent/>
             <SixthComponent/>
-
-
-            {/*responsive chi kdzes*/}
-            {/*<SeventhComponent/>*/}
-            {/* responsive chi kdzes */}
-
-
             <EightComponent/>
             <NinthComponent/>
-
-            {/*<Test/>*/}
-
-
-
         </main>
     );
 };

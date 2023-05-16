@@ -1,4 +1,35 @@
 {
-  "users": {
-  }
+  "users": [
+    {
+      "firstname": "Gev",
+      "lastname": "Danielyan",
+      "email": "armenak2001@mail.ru",
+      "password": "123456",
+      "confirm_password": "123456",
+      "id": "d972f1cc-a6f0-4ba5-bcd7-31c490fb8ab1",
+      "role": "admin"
+    }
+  ],
+  "create-category": [
+    {
+      "category": "fruit",
+      "id": "c2ca9cb2-d59d-46e8-b88a-14ac6c6e33a6"
+    },
+    {
+      "category": "vegetable",
+      "id": "34629055-30f5-405d-b27d-ecd9697cffdf"
+    }
+  ],
+  "create-product": [
+    {
+      "product": "Potato",
+      "price": "250",
+      "id": "a1292f46-a99a-4244-84a9-75ebdf8f5423"
+    },
+    {
+      "product": "Avocado",
+      "price": "560",
+      "id": "c81ee426-0968-466b-8292-ffa561d42a1f"
+    }
+  ]
 }

@@ -2,18 +2,33 @@ import React from 'react';
 import {useForm} from "react-hook-form";
 import {useNavigate} from "react-router";
 import {toast} from "react-toastify";
+import axios from "axios";
+import {logUser} from "../../store/user";
+import {useDispatch} from "react-redux";
+import {Cookies, useCookies} from "react-cookie";
 
 const SignIn = () => {
-
+    const dispatch = useDispatch()
     const navigate = useNavigate();
     const {register, handleSubmit, formState: {errors}} = useForm();
-    const onSubmit = (data) => {
+    const [cookies, setCookie] = useCookies(['userData'])
+    const onSubmit = async (data) => {
         try {
-            console.log(data, 'data')
+            const response = await dispatch(logUser())
+            const users = response.data;
+            const userLog = users.find((user) => user.email === data.email)
+            if (!userLog) {
+                return toast.error('Email not found in the database')
+            }
+            if (userLog.password !== data.password) {
+                return toast.error('Invalid password');
+            }
             toast.success('Success');
-            setTimeout(() => navigate("/"), 2000)
+            setCookie('userData', userLog)
+            console.log(cookies.userData)
+            navigate("/")
         } catch (e) {
-            toast.error('Warning');
+            toast.error(e?.message || 'Something went wrong');
         }
     };
 
@@ -45,7 +60,7 @@ const SignIn = () => {
                                 className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                                 type="password"
                                 id="password"
-                                {...register('confirm_password', {required: true, minLength: 6})}
+                                {...register('password', {required: true, minLength: 6})}
                             />
                             {errors.password && (
                                 <span className="text-red-500">
@@ -63,9 +78,11 @@ const SignIn = () => {
                         </div>
                     </form>
                 </div>
-            </div>
-        </div>
 
+            </div>
+
+
+        </div>
 
 
     );
