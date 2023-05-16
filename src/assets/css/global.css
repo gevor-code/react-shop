@@ -1,0 +1,236 @@
+.main-container {
+    max-width: 1400px;
+    padding-left: 64px;
+    padding-right: 64px;
+    margin: 0 auto;
+}
+
+
+@media (max-width: 1400px) {
+    .main-container {
+        max-width: 100%;
+    }
+}
+
+
+@media (max-width: 991px) {
+
+    .main-container {
+        padding-left: 32px;
+        padding-right: 32px;
+    }
+}
+
+@media (max-width: 991px) {
+
+    .cardsContainer {
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        height: 1150px;
+    }
+
+    .eachCard {
+        width: 85% !important;
+        margin-bottom: 2vh;
+    }
+}
+
+@media (max-width: 600px) {
+    .main-container {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+}
+
+.text-h1 {
+
+}
+
+.header-container {
+    max-width: 1600px;
+    padding-left: 64px;
+    padding-right: 64px;
+    margin: 0 auto;
+}
+
+@media (max-width: 1600px) {
+    .header-container {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 991px) {
+    .header-container {
+        padding-left: 32px;
+        padding-right: 32px;
+    }
+}
+
+@media (max-width: 600px) {
+    .header-container {
+        padding: 0 16px;
+    }
+}
+
+.bg-footer {
+    background-image: url("../../../public/assets/images/footer.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    border-radius: 30px;
+}
+
+.bg-food {
+    background-image: url("../../../public/assets/images/182b67984c5420ca1bfdf321fbd839b3ef3a938fcf68d2ed1ed49703e1fbc10a.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%;
+    height: 500px;
+    margin-top: 2rem;
+}
+
+.bg-fruit1 {
+    background-image: url("../../../public/assets/images/fruit1.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 30px;
+}
+
+.bg-fruit2 {
+    background-image: url("../../../public/assets/images/fruit2.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 30px;
+}
+
+.bg-fruit3 {
+    background-image: url("../../../public/assets/images/Logo.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 600px;
+}
+
+@media (max-width: 500px) {
+    .bg-fruit3 {
+        height: 400px;
+    }
+}
+
+.bg-chery {
+    background-image: url("../../../public/assets/images/cherry.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 780px;
+    height: 520px;
+}
+
+.bgImgBox {
+    background-image: url("../../../public/assets/images/vitamin.svg");
+    /*width: 677px;*/
+    width: calc(100% - 55%);
+    height: 524px;
+    object-fit: contain;
+}
+
+.bgImgBox2 {
+    background-image: url("../../../public/assets/images/cherry.svg");
+    /*width: 677px;*/
+    width: calc(100% - 55%);
+    height: 524px;
+    object-fit: contain;
+}
+
+@media (max-width: 650px) {
+    .imgPart {
+        width: 100vw;
+        padding: 0;
+        text-align: center;
+    }
+}
+
+@media (max-width: 550px) {
+    .btnPart {
+        width: 100%;
+        height: 50px;
+    }
+}
+
+@media (max-width: 600px) {
+    .noPad {
+        padding: 0;
+    }
+}
+@media (max-width: 650px) {
+    .contentP{
+        left:17%
+    }
+}
+@media (max-width:530px ) {
+    .contentP{
+        padding:3rem
+    }
+}
+@media (max-width: 490px) {
+    .contentP{
+        padding: 4rem 2rem;
+        left: 5%;
+    }
+}
+
+.back-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    font-size: 60px;
+    background: orange;
+    color: white;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 5px 10px #ccc;
+    height: 96px;
+    width: 74px;
+    border-radius: 17px;
+}
+
+.back-to-top:hover {
+    background: red;
+}
+
+/* test */
+
+
+.form{
+    background-color: white;
+    border-radius: 5px;
+    width: 550px;
+    margin: 20px auto;
+    padding: 20px;
+    /* height: 600px; */
+}
+
+.form-body{
+    text-align: left;
+    padding: 20px 10px;
+}
+
+.form-body > *{
+    padding: 5px;
+}
+
+.form__label{
+    width: 40%;
+}
+
+.form_input{
+    width: 60%;
+}
+
+.footer{
+    text-align: center;
+}
