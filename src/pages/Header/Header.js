@@ -91,7 +91,7 @@ const Navbar = () => {
 
                                                     <div className="m-4 flex flex-col  sm:gap-2 md:gap-0 lg:gap-2 xl:gap-4">
                                                         <p className="text-medium font-bold md:text-[16px] lg:text-xl xl:text-xl text-text">
-                                                            {cookies.userData.firstname} {cookies.userData.lastname}
+                                                            {cookies.userData?.firstname} {cookies.userData?.lastname}
                                                         </p>
                                                         <button className="text-text ml-2" onClick={()=>logout()}>Logout</button>
                                                     </div>
