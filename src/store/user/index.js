@@ -35,24 +35,32 @@ export const logUser = (payload) => async dispatch => {
 }
 export const addCategory = (payload) => async (dispatch) => {
     try {
-        const response = await axios.post('http://localhost:8081/create-category', payload);
+        const response = await axios.post('http://localhost:8081/categories', payload);
         return response.data;
     } catch (error) {
         toast.error(error.message);
     }
 };
-export const getAllCategory=(payload)=>async(dispatch)=>{
+export const getAllCategory = () => async (dispatch) => {
+    try {
+        const response = await axios.get('http://localhost:8081/categories');
+        return console.log(response.data);
+
+    } catch (error) {
+        toast.error(error.message);
+    }
+};
+export const dellCategory=()=>async (dispatch)=>{
     try{
-        const responsive=await axios.get("http://localhost:8081/create-category")
-        return responsive.data
+
     }catch (e){
-        toast.error(e.message)
+                toast.error(e.message)
     }
 }
 
 export const addProduct = (payload) => async (dispatch) => {
     try {
-        const resp = await axios.post("http://localhost:8081/create-product", payload)
+        const resp = await axios.post("http://localhost:8081/products", payload)
         return resp.data
     } catch (e) {
             toast.error(e.message)
