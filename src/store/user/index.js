@@ -44,26 +44,89 @@ export const addCategory = (payload) => async (dispatch) => {
 export const getAllCategory = () => async (dispatch) => {
     try {
         const response = await axios.get('http://localhost:8081/categories');
-        return console.log(response.data);
-
+        return response.data;
     } catch (error) {
         toast.error(error.message);
     }
 };
-export const dellCategory=()=>async (dispatch)=>{
-    try{
-
-    }catch (e){
-                toast.error(e.message)
-    }
-}
-
 export const addProduct = (payload) => async (dispatch) => {
     try {
-        const resp = await axios.post("http://localhost:8081/products", payload)
+        const resp = await axios.post("http://localhost:8081/product", payload)
         return resp.data
     } catch (e) {
-            toast.error(e.message)
+        toast.error(e.message)
+    }
+};
+export const getCateg = () => async (dispatch) => {
+    try {
+        const response = await axios.get('http://localhost:8081/categories?_sort=category&_order=desc');
+        return response.data
+    } catch (error) {
+        toast.error(error.message);
+    }
+};
+export const getProd = () => async (dispatch) => {
+    try {
+        const response = await axios.get('http://localhost:8081/product?_sort=product&_order=desc')
+        return response.data
+    } catch (err) {
+        toast.error(err.message)
+    }
+}
+export const deleteCategory = (categoryId) => async (dispatch) => {
+    try {
+        const response = await axios.delete(`http://localhost:8081/categories/${categoryId}`)
+        return response.data
+    } catch (error) {
+        toast.error(error.message)
+    }
+}
+export const deleteProduct = (productId) => async (dispatch) => {
+    try {
+        const response = await axios.delete(`http://localhost:8081/product/${productId}`)
+        return response.data
+    } catch (err) {
+        toast.error(err.message)
+    }
+}
+export const productCategory = (productId) => async (dispatch) => {
+    try {
+        const response = await axios.get(`http://localhost:8081/product/${productId}`)
+        return response.data
+    } catch (error) {
+        toast.error(error.message)
+    }
+}
+export const getProductId=(productId)=>async(dispatch)=>{
+    try{
+        const resp=await axios.get(`http://localhost:8081/product/${productId}`)
+        return resp.data
+    }catch(error){
+        toast.error(error.message)
+    }
+}
+export const getCategoryId = (categoryId) => async (dispatch) => {
+    try {
+        const resp = await axios.get(`http://localhost:8081/categories/${categoryId}`)
+        return resp.data
+    } catch (error) {
+        toast.error(error.message)
+    }
+}
+export const updateCategory = (categoryId, newCategory) => async (dispatch) => {
+    try {
+        const response = await axios.put(`http://localhost:8081/categories/${categoryId}`, {category: newCategory})
+        return response.data
+    } catch (e) {
+        toast.error(e.message)
+    }
+}
+export const updateProduct=(productId,newProduct)=>async(dispatch)=>{
+    try{
+        const response=await axios.put(`http://localhost:8081/product/${productId}`,newProduct)
+        return response.data
+    }catch (error){
+        toast.error(error.message)
     }
 }
 
