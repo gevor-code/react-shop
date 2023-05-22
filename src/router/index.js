@@ -11,6 +11,8 @@ import Category from "../pages/Admin/Create/Category";
 import Product from "../pages/Admin/Create/Product";
 import Products from "../pages/Admin/Products/Products";
 import CategoryList from "../pages/Admin/CategoryList/CategoryList";
+import CategoryEdit from "../pages/Admin/CategoryList/CategoryEdit";
+import ProductEdit from "../pages/Admin/Products/ProductEdit";
 
 
 
@@ -23,9 +25,11 @@ export const router = createBrowserRouter(
             <Route path="signup" element={<Layout><SignUp/></Layout>} />
             <Route path="admin" element={<Admin/>}/>
             <Route path="admin/categories" element={<Category/>}/>
-            <Route path="admin/products" element={<Product/>}/>
+            <Route path="admin/product" element={<Product/>}/>
             <Route path="admin/category-list" element={<CategoryList/>}/>
-            <Route path="admin/products" element={<Products/>}/>
+            <Route path="admin/product-list" element={<Products/>}/>
+            <Route path="admin/category-edit/:id" element={<CategoryEdit/>}/>
+            <Route path="admin/product-edit/:id" element={<ProductEdit/>}/>
 
 
             <Route path='*' element={<h1 className={"text-xl text-red"}>Page not found</h1>}/>

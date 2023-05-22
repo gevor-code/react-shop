@@ -9,7 +9,7 @@ import {v4 as uuidv4} from 'uuid';
 
 const Category = () => {
     const dispatch = useDispatch()
-    const {register, handleSubmit, formState: {errors, isValid}} = useForm();
+    const {register, handleSubmit, formState: {errors, isValid},reset} = useForm();
     const [post, setPost] = useState({
         category: "",
     })
@@ -21,6 +21,8 @@ const Category = () => {
             data.id = uuidv4()
             await dispatch(addCategory(data));
             toast.success('Category added successfully');
+            setPost({category: ""})
+            reset()
         } catch (e) {
             toast.error('Error adding category');
         }

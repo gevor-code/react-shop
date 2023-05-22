@@ -12,37 +12,28 @@
   ],
   "categories": [
     {
-      "category": "fruit",
-      "id": "c2ca9cb2-d59d-46e8-b88a-14ac6c6e33a6"
+      "category": "Meat",
+      "id": "b9e635f2-b001-4030-91a5-984072157a63"
     },
     {
-      "category": "vegetable",
-      "id": "34629055-30f5-405d-b27d-ecd9697cffdf"
+      "category": "Fruit",
+      "id": "35f35e57-30c2-4a3f-8af1-e2187b4a2798"
     },
     {
-      "category": "meat",
-      "id": "0d677a92-f926-4a12-b1a9-76c08a546761"
-    },
-    {
-      "category": "qqqq",
-      "id": "de62221e-bf6e-411e-8236-c25bafacd938"
+      "category": "Vegetable",
+      "id": "169c92d8-5394-4e1d-9218-54a938a49da9"
     }
   ],
-  "products": [
+  "product": [
     {
-      "product": "Potato",
-      "price": "250",
-      "id": "a1292f46-a99a-4244-84a9-75ebdf8f5423"
-    },
-    {
-      "product": "Avocado",
-      "price": "560",
-      "id": "c81ee426-0968-466b-8292-ffa561d42a1f"
-    },
-    {
-      "product": "Chicken",
-      "price": "600",
-      "id": "df4d4273-b6fd-40f9-9f58-e3964ff15e1c"
+      "title": "Grapefruit",
+      "description": "asdasd",
+      "price": "800",
+      "special_price": "650",
+      "quantity": "4",
+      "category": "fruit",
+      "created_at": "2023-05-21T00:00:13.181Z",
+      "id": "2348f231-f365-41eb-8df9-a820e74d43ab"
     }
   ]
 }
