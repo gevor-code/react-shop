@@ -66,6 +66,9 @@ const Navbar = () => {
                                     <li className="mx-4 my-6 md:my-0"><Link to="/shop"
                                                                             className="text-medium font-bold text-xl text-text hover:text-cyan-500 duration-500">Shop</Link>
                                     </li>
+                                    <li className="mx-4 my-6 md:my-0"><Link to="/blog"
+                                                                            className="text-medium font-bold text-xl text-text hover:text-cyan-500 duration-500">Blog</Link>
+                                    </li>
 
 
                                 </ul>

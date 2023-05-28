@@ -7,9 +7,9 @@ import {toast} from "react-toastify";
 export const fetchProfile = (payload) => async dispatch => {
     try {
         const resp = await axios.get('http://localhost:8081/users/')
-        console.log(resp, 'resp')
+        return resp.data
     } catch (e) {
-        console.log(e, 'e')
+        toast.error(e.message, 'e')
     }
 }
 export const regUser = (payload) => async dispatch => {
@@ -33,6 +33,14 @@ export const logUser = (payload) => async dispatch => {
         toast.error(e.message)
     }
 }
+export const getUser = () => async dispatch => {
+    try {
+        return await axios.get("http://localhost:8081/users")
+    } catch (e) {
+        toast.error(e.message)
+    }
+}
+
 export const addCategory = (payload) => async (dispatch) => {
     try {
         const response = await axios.post('http://localhost:8081/categories', payload);
@@ -57,6 +65,22 @@ export const addProduct = (payload) => async (dispatch) => {
         toast.error(e.message)
     }
 };
+export const addBlog = (payload) => async (dispatch) => {
+    try {
+        const resp = await axios.post("http://localhost:8081/blog", payload)
+        return resp.data
+    } catch (e) {
+        toast.error(e.message)
+    }
+};
+export const getBlog = () => async (dispatch) => {
+    try {
+        const resp = await axios.get("http://localhost:8081/blog?_sort=blog&_order=desc")
+        return resp.data
+    } catch (error) {
+        toast.error(error.message)
+    }
+}
 export const getCateg = () => async (dispatch) => {
     try {
         const response = await axios.get('http://localhost:8081/categories?_sort=category&_order=desc');
@@ -76,6 +100,14 @@ export const getProd = () => async (dispatch) => {
 export const deleteCategory = (categoryId) => async (dispatch) => {
     try {
         const response = await axios.delete(`http://localhost:8081/categories/${categoryId}`)
+        return response.data
+    } catch (error) {
+        toast.error(error.message)
+    }
+}
+export const deleteBlog = (blogId) => async (dispatch) => {
+    try {
+        const response = await axios.delete(`http://localhost:8081/blog/${blogId}`)
         return response.data
     } catch (error) {
         toast.error(error.message)
@@ -113,6 +145,14 @@ export const getCategoryId = (categoryId) => async (dispatch) => {
         toast.error(error.message)
     }
 }
+export const getBlogById = (blogId) => async (dispatch) => {
+    try {
+        const response = await axios.get(`http://localhost:8081/blog/${blogId}`);
+        return response.data;
+    } catch (error) {
+        toast.error(error.message);
+    }
+};
 export const updateCategory = (categoryId, newCategory) => async (dispatch) => {
     try {
         const response = await axios.put(`http://localhost:8081/categories/${categoryId}`, {category: newCategory})
@@ -121,11 +161,19 @@ export const updateCategory = (categoryId, newCategory) => async (dispatch) => {
         toast.error(e.message)
     }
 }
-export const updateProduct=(productId,newProduct)=>async(dispatch)=>{
-    try{
-        const response=await axios.put(`http://localhost:8081/product/${productId}`,newProduct)
+export const updateBlog = (blogId, newBlog) => async (dispatch) => {
+    try {
+        const response = await axios.put(`http://localhost:8081/blog/${blogId}`, newBlog);
+        return response.data;
+    } catch (error) {
+        toast.error(error.message);
+    }
+};
+export const updateProduct = (productId, newProduct) => async (dispatch) => {
+    try {
+        const response = await axios.put(`http://localhost:8081/product/${productId}`, newProduct)
         return response.data
-    }catch (error){
+    } catch (error) {
         toast.error(error.message)
     }
 }

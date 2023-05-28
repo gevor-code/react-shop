@@ -25,7 +25,6 @@ const SignIn = () => {
             }
             toast.success('Success');
             setCookie('userData', userLog)
-            console.log(cookies.userData)
             navigate("/")
         } catch (e) {
             toast.error(e?.message || 'Something went wrong');

@@ -12,7 +12,7 @@ const CategoryEdit = () => {
     const { register, handleSubmit, formState: { errors, isValid }, setValue } = useForm();
 
     useEffect(() => {
-        fetchData();
+        if (id) fetchData();
     }, [dispatch, id]);
 
     const fetchData = async () => {
