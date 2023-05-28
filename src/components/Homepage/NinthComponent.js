@@ -20,13 +20,11 @@ const NinthComponent = () => {
 
                 <div className="flex max-w-[1400px] m-auto self-center flex-row justify-center mt-[15vw] mb-[18vw] center cardsContainer sm:mb-[8vw] sm:mt-[3vw] md:mb-[10vw] md:mt-[5vw] lg:mb-[10vw] lg:mt-[5vw] xl:mb-[8vw] xl:mt-[3vw]">
                     <div className="bgImgBox  mx-[10px] rounded-[30px] flex flex-col justify-around eachCard">
-                        <div
-                            className="flex flex-col items-center justify-center w-[82px] h-[82px] rounded-[41px] bg-[#fff]  ml-[5%]">
+                        <div className="flex flex-col items-center justify-center w-[82px] h-[82px] rounded-[41px] bg-[#fff]  ml-[5%]">
                             <span className=" font-[Roboto] text-lg font-extrabold text-[#274C5B]">25</span>
                             <span className=" font-[Roboto] text-lg font-extrabold text-[#274C5B]">Nov</span>
                         </div>
-                        <div
-                            className="w-[90%] shadow-2xl h-[330px] bg-[#fff] rounded-[31px] flex flex-col items-center justify-center self-center translate-y-[23%]">
+                        <div className="w-[90%] shadow-2xl h-[330px] bg-[#fff] rounded-[31px] flex flex-col items-center justify-center self-center translate-y-[23%]">
                             <div className="h-[90%] w-[90%] flex flex-col justify-around items-start ">
                                 <div className="flex flex-row items-center">
                                     <img src="/assets/images/usericon.svg" width="18" height="20" alt=""  className="mr-[10px]"/>

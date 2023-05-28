@@ -1,42 +1,77 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDispatch} from "react-redux";
 import {useParams} from "react-router";
 import {useForm} from "react-hook-form";
-import {getProductId, updateProduct} from "../../../store/user";
+import {getAllCategory, getProductId, updateProduct} from "../../../store/user";
 import {toast} from "react-toastify";
 import Admin from "../Admin";
 
 const ProductEdit = () => {
     const dispatch = useDispatch();
     const { id } = useParams();
-    const { register, handleSubmit, formState: { errors, isValid }, setValue, reset } = useForm();
-
+    const { register, handleSubmit, formState: { errors, isValid }, setValue } = useForm();
+    const [categories, setCategories] = useState([]);
+    const [myPost,setMyPost]=useState({})
     useEffect(() => {
         fetchData();
+        fetchCategories()
+
     }, [dispatch, id]);
+    const fetchCategories = async () => {
+        try {
+            const categories = await dispatch(getAllCategory());
+            setCategories(categories);
+        } catch (error) {
+            toast.error('Error categories:' || error.message);
+        }
+    };
+    const handleInput = (e) => {
+        setMyPost({...myPost, [e.target.name]: e.target.value});
+    };
 
     const fetchData = async () => {
         try {
             const productData = await dispatch(getProductId(id));
-            const { title, description, price, special_price, category, quantity, created_at } = productData;
+            const {
+                title,
+                description,
+                price,
+                special_price,
+                category,
+                images,
+                quantity,
+                created_at,
+            } = productData;
 
             setValue('title', title);
             setValue('description', description);
             setValue('price', price);
             setValue('special_price', special_price);
-            setValue('category', category.category || productData.category);
+            setValue('category', category.id );
+            setValue('images', images);
             setValue('quantity', quantity);
             setValue('created_at', created_at);
+            setMyPost({...myPost, category: category.id})
         } catch (error) {
             toast.error('Error retrieving product');
         }
     };
-
     const onSubmit = async (data) => {
         try {
-            await dispatch(updateProduct(id, data));
+            const findCategory = categories.find((obj) => {
+                return obj.id === data.category;
+            });
+
+            const updatedData = {
+                ...data,
+                category: {
+                    category: findCategory.category,
+                    id: findCategory.id,
+                },
+            };
+
+            await dispatch(updateProduct(id, updatedData));
             toast.success('Product updated successfully');
-            reset();
             fetchData();
         } catch (error) {
             toast.error('Error updating product');
@@ -45,7 +80,7 @@ const ProductEdit = () => {
     return (
         <div>
             <Admin/>
-            <div className="flex items-center justify-center bg-green-200 h-screen ">
+            <div className="flex items-center justify-center bg-green-200 h-[150vh] ">
                 <div
                     className="main-container contentP absolute sm:left-[41%] md:left-[41%] lg:left-[41%] xl:left-[41%]">
                     <div
@@ -60,7 +95,7 @@ const ProductEdit = () => {
                                         className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                                         type="text"
                                         id="title"
-                                        {...register('title', { required: true, pattern: /^[A-Za-z]+$/ })}
+                                        {...register('title', { pattern: /^[A-Za-z]+$/ })}
                                     />
                                     {errors.title && (
                                         <span className="text-red-500">
@@ -76,7 +111,7 @@ const ProductEdit = () => {
                                         className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                                         type="text"
                                         id="description"
-                                        {...register('description', { required: true, pattern: /^[A-Za-z]+$/ })}
+                                        {...register('description', {  pattern: /^[A-Za-z]+$/ })}
                                     />
                                     {errors.description && (
                                         <span className="text-red-500">
@@ -93,7 +128,6 @@ const ProductEdit = () => {
                                         type="text"
                                         id="price"
                                           {...register('price', {
-                                                required: true,
                                                 pattern: /^[0-9]+$/,
                                                 min: "100",
                                                 max: "1000"
@@ -115,7 +149,6 @@ const ProductEdit = () => {
                                         type="text"
                                         id="special_price"
                                         {...register('special_price', {
-                                            required: true,
                                             pattern: /^[0-9]+$/,
                                             min: "100",
                                             max: "1000"
@@ -137,7 +170,7 @@ const ProductEdit = () => {
                                         type="text"
                                         id="quantity"
                                         {...register('quantity', {
-                                            required: true,
+
                                             pattern: /^[0-9]+$/,
                                             min: "1",
                                             max: "100"
@@ -153,12 +186,21 @@ const ProductEdit = () => {
                                     <label className="block mb-1 text-gray-700" htmlFor="category">
                                         Category
                                     </label>
-                                    <input
+                                    <select
                                         className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                                        type="text"
                                         id="category"
-                                        {...register('category', { required: true, pattern: /^[A-Za-z]+$/ })}
-                                    />
+                                        name="category"
+                                        value={myPost.category}
+                                        {...register('category',)}
+                                        onChange={handleInput}
+                                    >
+                                        <option value="">Select a category</option>
+                                        {categories.map((category) => (
+                                            <option key={category.id} value={category.id}>
+                                                {category.category}
+                                            </option>
+                                        ))}
+                                    </select>
                                     {errors.category && (
                                         <span className="text-red-500">
                       {errors.category.type === 'required' ? 'Category is required' : 'Invalid Category'}
@@ -167,9 +209,8 @@ const ProductEdit = () => {
                                 </div>
                                 <div>
                                     <button
-                                        className={`${!isValid ? 'cursor-not-allowed bg-gray-600' : 'cursor-pointer bg-blue-500 hover:bg-blue-600'} text-white px-10 py-2 rounded`}
+                                        className='cursor-pointer bg-blue-500 hover:bg-blue-600 text-white px-10 py-2 rounded'
                                         type="submit"
-                                        disabled={!isValid}
                                     >Edit
                                     </button>
                                 </div>

@@ -35,11 +35,12 @@ const Products  = () => {
     const editProduct = async (productId) => {
         await navigate(`/admin/product-edit/${productId}`);
     };
+
     return (
         <div>
             <Admin />
-            <div className="flex items-center justify-center bg-green-200 h-screen ">
-                <div className="flex absolute top-[38%] left-[19%] border-2 bg-[#F5F5DC] p-[2rem] flex-col gap-8 items-center w-[80vw]">
+            <div className="flex items-center justify-center bg-green-200 h-[100vh] ">
+                <div className="flex absolute top-[25%] left-[23%]  flex-col gap-8 items-center">
                     <table className="min-w-full text-center text-sm font-light bg-[#faebd7]">
                         <caption className="caption-top mb-[20px] text-3xl font-extrabold font-[Roboto] italic">
                             Product List
@@ -51,6 +52,7 @@ const Products  = () => {
                             <th className="px-6 py-3 text-[20px]">Special Price</th>
                             <th className="px-6 py-3 text-[20px]">Quantity</th>
                             <th className="px-6 py-3 text-[20px]">Category</th>
+                            <th className="px-6 py-3 text-[20px]">Images</th>
                             <th className="px-6 py-3 text-[20px]">Created At</th>
                             <th className="px-6 py-3 text-[20px]">Action</th>
                         </tr>
@@ -61,11 +63,16 @@ const Products  = () => {
                                 <td className="border border-slate-700 text-lg px-6 py-4">{product.title}</td>
                                 <td className="border border-slate-700 text-lg px-6 py-4">{product.price}</td>
                                 <td className="border border-slate-700 text-lg  px-6 py-4">{product.special_price}</td>
-                                <td className="border border-slate-700 text-lg px-6 py-4">{product.quantity}</td>
-                                <td className="border border-slate-700 text-lg px-6 py-4">{product.category.category || product.category}</td>
+                                <td className="border border-slate-700 text-lg  px-6 py-4">{product.quantity}</td>
+                                <td className="border border-slate-700 text-lg px-6 py-4">{product?.category.category}</td>
+                                <td className="border border-slate-700 px-6 py-4">
+                                    {product.images.map((images,index) => (
+                                        <img key={index} src={images} className="w-[100px] h-[50px] object-cover" alt=""/>
+                                    ))}
+                                </td>
                                 <td className="border border-slate-700 text-lg px-6 py-4">{product.created_at}</td>
                                 <td className="p-10 flex justify-center border border-r-black">
-                                    <td >
+                                    <td>
                                         <button onClick={() => delProduct(product.id)}>
                                             <svg
                                                 xmlns="http://www.w3.org/2000/svg"
