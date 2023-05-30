@@ -95,7 +95,7 @@ const ProductEdit = () => {
                                         className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                                         type="text"
                                         id="title"
-                                        {...register('title', { pattern: /^[A-Za-z]+$/ })}
+                                        {...register('title', )}
                                     />
                                     {errors.title && (
                                         <span className="text-red-500">
@@ -111,7 +111,7 @@ const ProductEdit = () => {
                                         className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                                         type="text"
                                         id="description"
-                                        {...register('description', {  pattern: /^[A-Za-z]+$/ })}
+                                        {...register('description', )}
                                     />
                                     {errors.description && (
                                         <span className="text-red-500">
@@ -128,8 +128,8 @@ const ProductEdit = () => {
                                         type="text"
                                         id="price"
                                           {...register('price', {
-                                                pattern: /^[0-9]+$/,
-                                                min: "100",
+                                                pattern: /^\$[0-9]+(\.[0-9]{1,2})?$/,
+                                                min: "10",
                                                 max: "1000"
                                             })}
                                     />
@@ -149,8 +149,8 @@ const ProductEdit = () => {
                                         type="text"
                                         id="special_price"
                                         {...register('special_price', {
-                                            pattern: /^[0-9]+$/,
-                                            min: "100",
+                                            pattern: /^\$[0-9]+(\.[0-9]{1,2})?$/,
+                                            min: "10",
                                             max: "1000"
                                         })}
                                     />

@@ -42,8 +42,8 @@ const CategoryList = () => {
     return (
         <div>
             <Admin />
-            <div className="flex items-center justify-center bg-green-200 h-screen ">
-                <div className="flex absolute top-[38%] left-[32%] border-2 bg-[#F5F5DC] p-[2rem] flex-col gap-8 items-center w-[50vw]">
+            <div className="flex items-center justify-center bg-green-200 h-[110vh] ">
+                <div className="flex absolute top-[30%] left-[32%] border-2 bg-[#F5F5DC] p-[2rem] flex-col gap-8 items-center w-[50vw]">
                     <table className="min-w-full text-center text-sm font-light bg-[#faebd7]">
                         <caption className="caption-top mb-[20px] text-3xl font-extrabold font-[Roboto] italic">
                             Category List

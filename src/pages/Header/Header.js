@@ -2,17 +2,35 @@ import React, {useEffect, useRef, useState} from 'react';
 import {Link} from "react-router-dom";
 import HeaderLogo from "../../assets/svg/HeaderLogo";
 import {useCookies} from "react-cookie";
+import {useDispatch,} from "react-redux";
+import {quantityCart} from "../../store/cart";
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
     const [isOpen, setIsOpen] = useState(false);
+    const [isCartOpen, setIsCartOpen] = useState(false);
     const divRef = useRef(null);
     const [cookies, removeCookie] = useCookies(['userData'])
-
     const logout = () => {
         removeCookie('userData')
     }
+    const [cartItemCount, setCartItemCount] = useState(0);
+    const toggleCart = () => {
+        setIsCartOpen(!isCartOpen);
+    };
+    const dispatch=useDispatch()
+    const cartQuantity=(product)=>{
+        dispatch(quantityCart(product))
+    }
+    useEffect(() => {
+        const storedCart = dispatch(cartQuantity);
+        if (storedCart) {
+            const parsedCart = JSON.parse(storedCart);
+            setCartItemCount(parsedCart.length);
+        }
+    }, []);
+
 
     useEffect(() => {
         document.addEventListener('click', handleClickOutside);
@@ -31,6 +49,7 @@ const Navbar = () => {
     const toggleOpen = () => {
         setIsOpen(!isOpen);
     };
+
 
     return (
         <div className=" bg-white shadow-xl sticky z-10 top-0">
@@ -122,7 +141,7 @@ const Navbar = () => {
                                         className="bg-semiWhite  h-input3 sm:h-input rounded-md  w-[8rem] sm:w-48 md:w-48 lg:w-48 pl-[16px] xl:w-48 md:w-input"/>
                                     <div
                                         className="bg-lightGreen flex justify-center items-center rounded-brFull w-circle3 h-circle3 sm:w-circle2 sm:h-circle2 md:w-circle2 md:h-circle2 lg:w-circle2 lg:h-circle2 xl:h-circle2 xl:w-circle2 absolute mr-2">
-                                        <img src="/assets/images/search.svg" width="57" height="56"/>
+                                        <img src="/assets/images/search.svg" width="57" height="56" alt=""/>
                                     </div>
                                 </div>
                                 <div
@@ -130,10 +149,42 @@ const Navbar = () => {
                                     <div className=" flex justify-center items-center  w-circle h-circle ml-1">
                                         <img src="/assets/images/shop.svg"
                                              className=" w-[35px] sm:w-[49px] md:w-[49px] lg:w-[49px] xl:w-[49px]"
-                                             height="56"/>
+                                             height="56" alt=""/>
                                     </div>
-                                    <p className=" text-[12px] sm:text-medium  md:text-medium lg:text-medium xl:text-medium font-bold text-text m-2">Cart
-                                        (0)</p>
+
+                                    <p className=" text-[12px] sm:text-medium  md:text-medium lg:text-medium xl:text-medium font-bold text-text m-2"
+                                       onClick={toggleCart}> Cart ({cartItemCount})
+                                    </p>
+                                    {isCartOpen ? (
+                                        <div
+                                            className="flex items-center  absolute rounded-xl p-4 2xl:top-[100px] 2xl:right-[-19%] bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-md h-[50vh] w-[50%]">
+                                            {localStorage.getItem("cart") ? (
+                                                <div className="flex flex-col gap-10">
+                                                    {JSON.parse(localStorage.getItem("cart")).map((item, index) => (
+                                                        <div key={index}>
+                                                            <div className="flex items-center gap-8">
+                                                                <img src={item.images} width="100px" height="200px" className="rounded-[2rem]"
+                                                                     alt=""/>
+                                                                <div>
+                                                                    <p className="font-[Roboto] text-[29px] text-white font-extrabold">{item.title}</p>
+                                                                    <div className="flex gap-8">
+                                                                        <p className="text-3xl text-green-200">{item.special_price}</p>
+                                                                        <p className="line-through text-2xl text-blue-50">{item.price}</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            ) : (
+                                                <p>Your cart is empty.</p>
+                                            )}
+                                        </div>
+                                    )
+                                        : null
+                                    }
+
                                 </div>
 
                             </div>

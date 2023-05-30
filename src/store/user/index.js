@@ -177,7 +177,6 @@ export const updateProduct = (productId, newProduct) => async (dispatch) => {
         toast.error(error.message)
     }
 }
-
 // Slice
 const slice = createSlice({
     name: 'user',
@@ -190,10 +189,9 @@ const slice = createSlice({
     reducers: {
         loginSuccess: (state, action) => {
             // Example of Reducer
-            // state.user = action.payload;
+            state.user = action.payload;
         },
     },
 });
-
 const {loginSuccess} = slice.actions
 export default slice.reducer

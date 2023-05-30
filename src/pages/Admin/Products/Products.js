@@ -39,8 +39,8 @@ const Products  = () => {
     return (
         <div>
             <Admin />
-            <div className="flex items-center justify-center bg-green-200 h-[100vh] ">
-                <div className="flex absolute top-[25%] left-[23%]  flex-col gap-8 items-center">
+            <div className="flex items-center justify-center bg-green-200 h-[300vh] ">
+                <div className="flex absolute top-[25%] left-[19%]  flex-col gap-8 items-center">
                     <table className="min-w-full text-center text-sm font-light bg-[#faebd7]">
                         <caption className="caption-top mb-[20px] text-3xl font-extrabold font-[Roboto] italic">
                             Product List
