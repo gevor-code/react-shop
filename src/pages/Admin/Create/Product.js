@@ -124,7 +124,7 @@ const Product = () => {
 
                                                                    {...register('price', {
                                                                        required: true,
-                                                                       pattern: /^[0-9]+$/,
+                                                                       pattern: /^\$[0-9]+(\.[0-9]{1,2})?$/,
                                                                        min: "10",
                                                                        max: "100000"
                                                                    })}
@@ -145,7 +145,7 @@ const Product = () => {
 
                                                                    {...register('special_price', {
                                                                        required: true,
-                                                                       pattern: /^[0-9]+$/,
+                                                                       pattern: /^\$[0-9]+(\.[0-9]{1,2})?$/,
                                                                        min: "10",
                                                                        max: "100000"
                                                                    })}

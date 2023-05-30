@@ -157,7 +157,12 @@
     .imgPart {
         width: 100vw;
         padding: 0;
-        text-align: center;
+    }
+}
+@media (max-width: 636px) {
+    .shopPart{
+        width: 100vw!important;
+        padding: 0!important;
     }
 }
 
