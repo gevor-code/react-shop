@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {Link} from "react-router-dom";
 import HeaderLogo from "../../assets/svg/HeaderLogo";
 import {useCookies} from "react-cookie";
-import {useDispatch,} from "react-redux";
+import {useDispatch, useSelector,} from "react-redux";
 import {quantityCart} from "../../store/cart";
 
 const Navbar = () => {
@@ -15,19 +15,37 @@ const Navbar = () => {
     const logout = () => {
         removeCookie('userData')
     }
-    const [cartItemCount, setCartItemCount] = useState(0);
     const toggleCart = () => {
         setIsCartOpen(!isCartOpen);
     };
-    const dispatch=useDispatch()
-    const cartQuantity=(product)=>{
-        dispatch(quantityCart(product))
-    }
-    useEffect(() => {
-        const storedCart = dispatch(cartQuantity);
+    const handleClickOutside = (event) => {
+        if (divRef.current && !divRef.current.contains(event.target)) {
+            setIsOpen(false);
+        }
+    };
+
+    const toggleOpen = () => {
+        setIsOpen(!isOpen);
+    };
+    const dispatch = useDispatch()
+    const deleteCartItem = (itemId) => {
+        const storedCart = localStorage.getItem("cart");
         if (storedCart) {
             const parsedCart = JSON.parse(storedCart);
-            setCartItemCount(parsedCart.length);
+            const updatedCart = parsedCart.filter((item) => item.id !== itemId);
+            localStorage.setItem("cart", JSON.stringify(updatedCart));
+            const updatedCartCount = updatedCart.length;
+            dispatch(quantityCart(updatedCartCount));
+        }
+
+    };
+    const cartItemCount = useSelector((state) => state.cart.quantity);
+    useEffect(() => {
+        const storedCart = localStorage.getItem("cart");
+        if (storedCart) {
+            const parsedCart = JSON.parse(storedCart);
+            const cartCount = parsedCart.length;
+            dispatch(quantityCart(cartCount));
         }
     }, []);
 
@@ -39,17 +57,6 @@ const Navbar = () => {
             document.removeEventListener('click', handleClickOutside);
         };
     }, []);
-
-    const handleClickOutside = (event) => {
-        if (divRef.current && !divRef.current.contains(event.target)) {
-            setIsOpen(false);
-        }
-    };
-
-    const toggleOpen = () => {
-        setIsOpen(!isOpen);
-    };
-
 
     return (
         <div className=" bg-white shadow-xl sticky z-10 top-0">
@@ -144,47 +151,95 @@ const Navbar = () => {
                                         <img src="/assets/images/search.svg" width="57" height="56" alt=""/>
                                     </div>
                                 </div>
-                                <div
-                                    className=" h-input3 sm:h-input md:h-input lg:h-input xl:h-input border border-border rounded-md flex justify-evenly items-center">
-                                    <div className=" flex justify-center items-center  w-circle h-circle ml-1">
-                                        <img src="/assets/images/shop.svg"
-                                             className=" w-[35px] sm:w-[49px] md:w-[49px] lg:w-[49px] xl:w-[49px]"
-                                             height="56" alt=""/>
+                                <div className="relative">
+                                    <div
+                                        className="h-input3 sm:h-input md:h-input lg:h-input xl:h-input border border-border rounded-md flex justify-evenly items-center">
+                                        <div className="flex justify-center items-center w-circle h-circle ml-1">
+                                            <img
+                                                src="/assets/images/shop.svg"
+                                                className="w-[35px] sm:w-[49px] md:w-[49px] lg:w-[49px] xl:w-[49px]"
+                                                height="56"
+                                                alt=""
+                                            />
+                                        </div>
+
+                                        <p className="text-[12px] sm:text-medium md:text-medium lg:text-medium xl:text-medium font-bold text-text m-2"
+                                           onClick={toggleCart}>Cart ({cartItemCount})
+                                        </p>
                                     </div>
 
-                                    <p className=" text-[12px] sm:text-medium  md:text-medium lg:text-medium xl:text-medium font-bold text-text m-2"
-                                       onClick={toggleCart}> Cart ({cartItemCount})
-                                    </p>
-                                    {isCartOpen ? (
-                                        <div
-                                            className="flex items-center  absolute rounded-xl p-4 2xl:top-[100px] 2xl:right-[-19%] bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-md h-[50vh] w-[50%]">
-                                            {localStorage.getItem("cart") ? (
-                                                <div className="flex flex-col gap-10">
-                                                    {JSON.parse(localStorage.getItem("cart")).map((item, index) => (
-                                                        <div key={index}>
-                                                            <div className="flex items-center gap-8">
-                                                                <img src={item.images} width="100px" height="200px" className="rounded-[2rem]"
-                                                                     alt=""/>
-                                                                <div>
-                                                                    <p className="font-[Roboto] text-[29px] text-white font-extrabold">{item.title}</p>
-                                                                    <div className="flex gap-8">
-                                                                        <p className="text-3xl text-green-200">{item.special_price}</p>
-                                                                        <p className="line-through text-2xl text-blue-50">{item.price}</p>
+                                    {isCartOpen && (
+                                        <div ref={divRef}
+                                             className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-sm">
+                                            <div
+                                                className=" openCart flex pl-[1rem] pt-[8rem]  sm:pl-[1rem] sm:pt-[8rem] md:pl-[1rem] md:pt-[6rem] lg:pl-[2rem] lg:pt-[6rem] xl:pl-[3rem] xl:pt-[3rem] 2xl:pl-[3rem] 2xl:pt-[3rem] absolute  top-[90px] right-[-19px] sm:top-[100px] sm:right-[-19px] md:top-[170px] md:right-[-19px] lg:top-[100px] lg:right-[-19px] xl:top-[100px] xl:right-[-19px] 2lx:top-[100px] 2xl:right-[-19px] rounded-xl p-4 bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-md w-[85%]  sm:w-[80%] md:w-[68%] lg:w-[60%] xl:w-[50%] 2xl:w-[50%] h-full">
+                                                <div className="flex justify-end">
+                                                    <button
+                                                        className=" absolute  top-[20px] right-[60px] sm:top-[20px] sm:right-[60px] md:top-[20px] md:right-[60px] lg:top-[20px] lg:right-[60px] xl:top-[20px] xl:right-[60px]  2xl:top-[20px] 2xl:right-[60px] text-white hover:text-gray-300 transition-colors duration-200"
+                                                        onClick={toggleCart}
+                                                    >
+                                                        <svg
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            className="h-16 w-16"
+                                                            viewBox="0 0 20 20"
+                                                            fill="currentColor"
+                                                        >
+                                                            <path
+                                                                fillRule="evenodd"
+                                                                d="M11.414 10L16.707 4.707a1 1 0 010 1.414L12.828 10l3.879 3.879a1 1 0 01-1.414 1.414L11.414 11l-3.879 3.879a1 1 0 01-1.414-1.414L10 11.586 6.121 7.707a1 1 0 011.414-1.414L11.414 10z"
+                                                                clipRule="evenodd"
+                                                            />
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                                {localStorage.getItem("cart") ? (
+                                                    <div className="flex flex-col gap-10">
+                                                        {JSON.parse(localStorage.getItem("cart")).map((item, index) => (
+                                                            <div key={index}>
+                                                                <div
+                                                                    className="flex items-center gap-8 sm:gap-8 md:gap-8 lg:gap-8 xl:gap-8 2xl:gap-8 cartGap">
+                                                                    <img src={item.images} width="100px" height="200px"
+                                                                         className="rounded-[2rem]" alt=""/>
+                                                                    <div>
+                                                                        <p className="font-[Roboto] text-[23px]  sm:text-[29px] md:text-[29px] lg:text-[29px] xl:text-[29px] 2xl:text-[29px] text-white font-extrabold cartText openCartText">{item.title}</p>
+                                                                        <div className="flex gap-8 priceGap">
+                                                                            <p className="text-2xl sm:text-3xl md:text-3xl lg:text-3xl xl:text-3xl 2xl:text-3xl text-green-200">{item.special_price}</p>
+                                                                            <p className="line-through text-[18px] sm:text-[24px] md:text-[24px] lg:text-[24px] lg:text-[24px] xl:text-[24px] 2xl:text-[24px] text-blue-50 cartPrice openCartPrice ">{item.price}</p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div>
+                                                                        <button onClick={() => deleteCartItem(item.id)}>
+                                                                            <svg
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                width="25"
+                                                                                height="25"
+                                                                                fill="currentColor"
+                                                                                className="bi bi-trash text-red"
+                                                                                viewBox="0 0 16 16"
+                                                                            >
+                                                                                <path
+                                                                                    d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"
+                                                                                    fill="red"
+                                                                                ></path>
+                                                                                <path
+                                                                                    fillRule="evenodd"
+                                                                                    d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"
+                                                                                    fill="red"
+                                                                                ></path>
+                                                                            </svg>
+                                                                        </button>
                                                                     </div>
                                                                 </div>
                                                             </div>
-
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            ) : (
-                                                <p>Your cart is empty.</p>
-                                            )}
+                                                        ))}
+                                                    </div>
+                                                ) : (
+                                                    <p className="flex font-[Roboto] italic absolute  top-[40%] right-[22%] sm:top-[40%] sm:right-[22%] md:top-[40%] md:right-[18%]  lg:top-[40%] lg:right-[22%] xl:top-[40%] xl:right-[20%] 2xl:top-[40%] 2xl:right-[26%] text-amber-100 items-center text-[30px] sm:text-[40px] md:text-[40px] lg:text-[40px] xl:text-[38px] ">Your
+                                                        cart is empty.</p>
+                                                )}
+                                            </div>
                                         </div>
-                                    )
-                                        : null
-                                    }
-
+                                    )}
                                 </div>
 
                             </div>
