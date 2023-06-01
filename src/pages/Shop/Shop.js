@@ -2,29 +2,20 @@ import React, {useEffect, useState} from 'react';
 import {useDispatch} from "react-redux";
 import {getProd} from "../../store/user";
 import StarsComponent from "../../components/Homepage/StarsComponent";
-import {addToCart} from "../../store/cart";
+import {quantityCart} from "../../store/cart";
 
 const Shop = () => {
     const [products, setProducts] = useState([]);
     const dispatch = useDispatch();
-    const [cart, setCart] = useState([]);
-    const [cartItemCount, setCartItemCount] = useState(0);
 
     const addToCart = (product) => {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const cartCount = cart.length;
         const updatedCart = [...cart, product];
-        localStorage.setItem("cart", JSON.stringify(updatedCart));
-        setCart(updatedCart);
-        setCartItemCount(updatedCart.length);
+        localStorage.setItem('cart', JSON.stringify(updatedCart));
+        const currentCount = cartCount + 1;
+        dispatch(quantityCart(currentCount))
     };
-
-    useEffect(() => {
-        const storedCart = localStorage.getItem("cart");
-        if (storedCart) {
-            const parsedCart = JSON.parse(storedCart);
-            setCart(parsedCart);
-            setCartItemCount(parsedCart.length);
-        }
-    }, []);
 
     useEffect(() => {
         const fetchProducts = async () => {
