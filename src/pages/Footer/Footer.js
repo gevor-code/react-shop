@@ -30,8 +30,7 @@ const Footer = () => {
                         Subscribe to our Newsletter
                     </h1>
                     <div className="flex flex-wrap items-baseline px-4 sm:px-0 ">
-                        <input type="text" placeholder="Your Email Address"
-                               className="py-2.5 px-2 sm:w-64 md:w-fit text-gray-800 rounded-2xl focus:outline-none tracking-widest mr-1 sm:mr-5 mb-4 lg:mb-0 display"/>
+                        <input type="text" placeholder="Your Email Address" className="py-2.5 px-2 sm:w-64 md:w-fit text-gray-800 rounded-2xl focus:outline-none tracking-widest mr-1 sm:mr-5 mb-4 lg:mb-0 display"/>
                         <button
                             className="px-5 py-2.5 font-[Poppins] text-white rounded-md bg-[#274C5B] hover:bg-[#46bbe4] duration-300 md:w-fit">
                             Subscribe

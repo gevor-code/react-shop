@@ -1,7 +1,12 @@
 import React from 'react';
 import StarsComponent from "./StarsComponent";
+import {useNavigate} from "react-router";
 
 const SixthComponent = () => {
+    const navigate=useNavigate()
+    const handleClick=()=>{
+        navigate('/shop')
+    }
     return (
         <div className="bg-[#274c5b]">
         <div className=" main-container pb-6 pt-6">
@@ -12,7 +17,7 @@ const SixthComponent = () => {
                 <span className="text-white font-[Roboto] font-extrabold text-3xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl">We Offer Organic For You</span>
                     </div>
                     <div className="flex flex-col justify-center">
-                    <button className="bg-[#EFD372] rounded-xl p-2 hover:bg-[#ec8973] hover:duration-500"> <span className="text-xs text-[#274C5B] font-bold p-5 ">View All Product</span></button>
+                    <button onClick={handleClick} className="bg-[#EFD372] rounded-xl p-2 hover:bg-[#ec8973] hover:duration-500"> <span className="text-xs text-[#274C5B] font-bold p-5 ">View All Product</span></button>
                     </div>
                 </div>
 

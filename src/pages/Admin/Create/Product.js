@@ -76,10 +76,8 @@ const Product = () => {
         <div>
             <Admin/>
             <div className="flex items-center justify-center bg-cyan-900 h-[150vh]">
-                <div
-                    className="main-container contentP absolute sm:left-[41%] md:left-[41%] lg:left-[41%] xl:left-[41%]">
-                    <div
-                        className="bg-gray-400 rounded-2xl w-[100%] p-[24px]">
+                <div className="main-container contentP absolute sm:left-[41%] md:left-[41%] lg:left-[41%] xl:left-[41%]">
+                    <div className="bg-gray-400 rounded-2xl w-[100%] p-[24px]">
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <div className="flex flex-col items-center text-center">
                                                         <div className="mb-4 flex gap-4 w-full flex-col">

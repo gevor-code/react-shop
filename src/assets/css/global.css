@@ -47,13 +47,9 @@
 
             padding-left: 0 !important;
             padding-right: 0 !important;
+            margin-bottom: 4rem !important;
         }
 }
-
-.text-h1 {
-
-}
-
 .header-container {
     max-width: 1600px;
     padding-left: 64px;
@@ -77,6 +73,10 @@
 @media (max-width: 600px) {
     .header-container {
         padding: 0 16px;
+    }
+    .sliderPart{
+        padding: 0!important;
+        margin: 0!important;
     }
 }
 
@@ -155,7 +155,7 @@
 
 @media (max-width: 650px) {
     .imgPart {
-        width: 100vw;
+        width: auto;
         padding: 0;
     }
 }
@@ -221,6 +221,24 @@
     .openCartPrice{
         font-size: 0.9rem;
     }
+    .slider{
+        padding: 0 !important;
+        width: 30vh;
+    }
+}
+
+@media (max-width: 415px) {
+    .slidDiv{
+        padding: 0!important;
+        width: 30vh;
+    }
+    .textSlider{
+        text-align: center;
+    }
+}
+
+@media screen {
+    
 }
 .back-to-top {
     position: fixed;
