@@ -1,6 +1,10 @@
 import React from 'react';
-
+import {useNavigate} from "react-router";
 const ThirdComponent = () => {
+    const navigate=useNavigate()
+    const handleClick=()=>{
+        navigate('/shop')
+    }
     return (
         <div className="bg-gray-100 flex justify-around">
             <div
@@ -36,7 +40,7 @@ const ThirdComponent = () => {
                         </div>
 
                             <div>
-                            <button
+                            <button onClick={handleClick}
                                 className="bg-[#274C5B] hover:bg-[#4b6b36] duration-300 rounded-lg py-4 px-8 text-white text-lg sm:text-xl md:text-xl lg:text-xl xl:text-2xl font-medium font-sans transition duration-500 ease-in-out">Shop
                                 Now
                             </button>

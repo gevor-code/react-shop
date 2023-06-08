@@ -19,6 +19,7 @@ import BlogList from "../pages/Admin/BlogList/BlogList";
 import BlogEdit from "../pages/Admin/BlogList/BlogEdit";
 import BlogPage from "../pages/Blog/BlogPage";
 import BlogInfo from "../pages/Admin/BlogList/BlogInfo";
+import ContactUs from "../pages/ContactUs/ContactUs";
 
 
 export const router = createBrowserRouter(
@@ -28,6 +29,7 @@ export const router = createBrowserRouter(
             <Route path="about" element={<Layout><About/></Layout>}/>
             <Route path="shop" element={<Layout><Shop/></Layout>}/>
             <Route path="blog" element={<Layout><BlogPage/></Layout>}/>
+            <Route path="contact-us" element={<Layout><ContactUs/></Layout>}/>
             <Route path="signin" element={<Layout><SignIn/></Layout>}/>
             <Route path="signup" element={<Layout><SignUp/></Layout>}/>
             <Route path="admin" element={<Admin/>}/>

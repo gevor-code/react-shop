@@ -1,13 +1,18 @@
-.bgAbout{
+.bgAbout {
     background-image: url("../../../../public/assets/images/aboutbg.svg");
     background-size: cover;
-
 }
-.bgSalad{
+
+.bgContactUs {
+    background-image: url("../../../../public/assets/images/contact-us.svg");
+    background-size:auto;
+}
+
+.bgSalad {
     background-image: url("../../../../public/assets/images/salad.jpg");
     background-position: center;
     background-repeat: no-repeat;
-    background-size:cover;
+    background-size: cover;
     height: 600px;
 }
 @media (max-width: 600px) {
@@ -15,4 +20,87 @@
         height: 300px;
         border-radius: 2rem;
     }
+}
+.bgBanana{
+    background-image: url("../../../../public/assets/images/bananaContact.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height:640px ;
+    border-radius: 2rem;
+}
+@media (max-width: 600px) {
+    .bgBanana{
+        height: 420px;
+        border-radius: 0!important;
+    }
+        .contactDiv{
+            width: 100%;
+            padding: 0!important;
+        }
+}
+.bgContactDiv{
+    background-image: url("../../../../public/assets/images/bgcontact.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height:660px;
+    border-radius: 3rem;
+}
+@media (max-width: 1024px) {
+    .divContact{
+        width: 100%;
+        padding-left: 0!important;
+        padding-right: 0!important;
+    }
+    .bgContactDiv{
+        border-radius: 0!important;
+    }
+    .containerDiv{
+        position: relative;
+    }
+    .shadowDiv{
+        box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+    }
+}
+@media (max-width: 600px) {
+    .textDiv{
+        font-size: 35px;
+    }
+    .inputPart{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .inputField{
+      width: 100vw
+    }
+    .labelInput{
+        text-align: center;
+    }
+    .test{
+        padding-left: 0!important;
+        padding-right: 0!important;
+    }
+    .textAreaPart{
+        padding-left: 0!important;
+        padding-right: 0!important;
+    }
+    .textAreaDiv{
+        width: 100vw
+    }
+    .placeHolderPart{
+        text-align: center;
+    }
+}
+@media (max-width: 420px) {
+    .divPart{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .bgContactDiv{
+        height:400px!important;
+    }
+
 }

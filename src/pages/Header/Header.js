@@ -6,40 +6,16 @@ import {useDispatch, useSelector,} from "react-redux";
 import {quantityCart} from "../../store/cart";
 
 const Navbar = () => {
+    const dispatch = useDispatch()
+    const cartItemCount = useSelector((state) => state.cart.quantity);
+
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
     const [isOpen, setIsOpen] = useState(false);
     const [isCartOpen, setIsCartOpen] = useState(false);
     const divRef = useRef(null);
     const [cookies, removeCookie] = useCookies(['userData'])
-    const logout = () => {
-        removeCookie('userData')
-    }
-    const toggleCart = () => {
-        setIsCartOpen(!isCartOpen);
-    };
-    const handleClickOutside = (event) => {
-        if (divRef.current && !divRef.current.contains(event.target)) {
-            setIsOpen(false);
-        }
-    };
 
-    const toggleOpen = () => {
-        setIsOpen(!isOpen);
-    };
-    const dispatch = useDispatch()
-    const deleteCartItem = (itemId) => {
-        const storedCart = localStorage.getItem("cart");
-        if (storedCart) {
-            const parsedCart = JSON.parse(storedCart);
-            const updatedCart = parsedCart.filter((item) => item.id !== itemId);
-            localStorage.setItem("cart", JSON.stringify(updatedCart));
-            const updatedCartCount = updatedCart.length;
-            dispatch(quantityCart(updatedCartCount));
-        }
-
-    };
-    const cartItemCount = useSelector((state) => state.cart.quantity);
     useEffect(() => {
         const storedCart = localStorage.getItem("cart");
         if (storedCart) {
@@ -58,6 +34,35 @@ const Navbar = () => {
         };
     }, []);
 
+    const logout = () => {
+        removeCookie('userData')
+    }
+    const toggleCart = () => {
+        setIsCartOpen(!isCartOpen);
+    };
+    const handleClickOutside = (event) => {
+        if (divRef.current && !divRef.current.contains(event.target)) {
+            setIsOpen(false);
+        }
+    };
+
+    const toggleOpen = () => {
+        setIsOpen(!isOpen);
+    };
+
+
+    const deleteCartItem = (itemId) => {
+        const storedCart = localStorage.getItem("cart");
+        if (storedCart) {
+            const parsedCart = JSON.parse(storedCart);
+            const updatedCart = parsedCart.filter((item) => item.id !== itemId);
+            localStorage.setItem("cart", JSON.stringify(updatedCart));
+            const updatedCartCount = updatedCart.length;
+            dispatch(quantityCart(updatedCartCount));
+        }
+
+    };
+
     return (
         <div className=" bg-white shadow-xl sticky z-10 top-0">
             <div className=" header-container ">
@@ -68,7 +73,7 @@ const Navbar = () => {
                 flex-wrap
                 sm:flex sm:items-center
                 md:justify-center md:items-center md:gap-4 md:flex-wrap
-                 lg:flex lg:flex-wrap lg:justify-between lg:items-center
+                 lg:flex lg:flex-wrap lg:justify-center lg:items-center
                   xl:flex xl:justify-between xl:items-center 2xl:flex justify-between
                   md:items-center
                   flex-row flex-nowrap">
@@ -95,7 +100,9 @@ const Navbar = () => {
                                     <li className="mx-4 my-6 md:my-0"><Link to="/blog"
                                                                             className="text-medium font-bold text-xl text-text hover:text-cyan-500 duration-500">Blog</Link>
                                     </li>
-
+                                    <li className="mx-4 my-6 md:my-0"><Link to="/contact-us"
+                                                                            className="text-medium font-bold text-xl text-text hover:text-cyan-500 duration-500">Contact Us</Link>
+                                    </li>
 
                                 </ul>
 

@@ -24,7 +24,6 @@ const BlogPage = () => {
             if (response) {
                 setMyBlog(response);
             }
-            console.log(response, "response")
         } catch (error) {
             toast.error(error.message);
         }
