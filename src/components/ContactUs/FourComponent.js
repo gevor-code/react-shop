@@ -63,7 +63,7 @@ const FourComponent = () => {
                                 className=" placeHolderPart inputField sm:w-[260px] md:w-[270px] lg:w-[380px] xl:w-[400px] px-4 py-2 border font-normal italic font-[Roboto] text-[18px] text-[#ABABAB] rounded focus:outline-none focus:ring-blue-500 focus:border-blue-500 border-[#7EB693]"
                                 type="text"
                                 id="company"
-                                placeholder="your company name is here"
+                                placeholder="Your company name is here"
                                 {...register('company', {required: true, pattern: /[A-Z]/})}
                             />
                             {errors.company && (
@@ -80,7 +80,7 @@ const FourComponent = () => {
                                 className=" placeHolderPart inputField sm:w-[260px] md:w-[270px] lg:w-[380px] xl:w-[400px] px-4 py-2 border font-normal italic font-[Roboto] text-[18px] text-[#ABABAB] rounded focus:outline-none focus:ring-blue-500 focus:border-blue-500 border-[#7EB693]"
                                 type="text"
                                 id="subject"
-                                placeholder="how can we help"
+                                placeholder="How can we help"
                                 {...register('subject', {required: true, pattern: /[A-Z]/})}
                             />
                             {errors.subject && (
@@ -102,7 +102,7 @@ const FourComponent = () => {
                        name="comment"
                        rows="9"
                        className="textAreaPart  placeHolderPart font-[Roboto] text-[18px] font-normal italic text-[#ABABAB] w-full px-0 text-sm pt-[2rem] pl-[1rem] text-gray-900 bg-white border border-[#7EB693] focus:ring-0 "
-                       placeholder="hello there, I would like to talk about how to..."
+                       placeholder="Hello there, I would like to talk about how to..."
                        {...register('comment', {required: true})}
                    ></textarea>
 

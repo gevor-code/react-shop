@@ -89,14 +89,19 @@ export const getCateg = () => async (dispatch) => {
         toast.error(error.message);
     }
 };
-export const getProd = () => async (dispatch) => {
+export const getProducts = (payload) => async (dispatch) => {
     try {
-        const response = await axios.get('http://localhost:8081/product?_sort=product&_order=desc')
-        return response.data
+        const categoryParams = payload.productByCategories?.map((category) => `category.category=${category}`).join("&");
+        let byPrice = payload.call !== true ? `_sort=special_price&_order=${payload.method?.sorting === "HighToLow" ? "desc" : "asc"}` : "";
+        let byCategory = `_sort=product&_order=desc${payload.callType === "withCategory" ? `&${categoryParams}` : ""}`;
+        let byRange = `special_price_gte=$${payload?.method?.range?.min}.00&special_price_lte=$${payload?.method?.range?.max}.00`
+        const response = await axios.get(`http://localhost:8081/product?${payload?.call === true ? byRange : payload.method?.type === "withPrice" && payload.callType == "checkbox" ? byPrice : payload.type == 'dontCall' ? byCategory : ""}`)
+        payload.setter?.(response.data)
+        return response.data;
     } catch (err) {
-        toast.error(err.message)
+        toast.error(err.message);
     }
-}
+};
 export const deleteCategory = (categoryId) => async (dispatch) => {
     try {
         const response = await axios.delete(`http://localhost:8081/categories/${categoryId}`)
@@ -123,7 +128,7 @@ export const deleteProduct = (productId) => async (dispatch) => {
 }
 export const productCategory = (productId) => async (dispatch) => {
     try {
-        const response = await axios.get(`http://localhost:8081/product/${productId}`)
+        const response = await axios.get(`http://localhost:8081/product?.category/${productId}`)
         return response.data
     } catch (error) {
         toast.error(error.message)
