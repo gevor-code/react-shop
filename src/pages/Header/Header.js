@@ -89,19 +89,20 @@ const Navbar = () => {
                                     isMenuOpen ? "bg-border opacity-100 z-10 top-[100px] bg-semiWhite uppercase md:top-[158px] " : "opacity-0 top-[-400px]"
                                 } transition-all ease-in duration-400 `}>
                                     <li className="mx-4 my-6 md:my-0"><Link to="/"
-                                                                            className="text-medium font-bold text-xl text-text hover:text-cyan-500 duration-500">Home</Link>
+                                                                            className=" font-bold text-xl text-text hover:text-cyan-500 duration-500">Home</Link>
                                     </li>
                                     <li className="mx-4 my-6 md:my-0"><Link to="/about"
-                                                                            className="text-medium font-bold text-xl text-text hover:text-cyan-500 duration-500">About</Link>
+                                                                            className=" font-bold text-xl text-text hover:text-cyan-500 duration-500">About</Link>
                                     </li>
                                     <li className="mx-4 my-6 md:my-0"><Link to="/shop"
-                                                                            className="text-medium font-bold text-xl text-text hover:text-cyan-500 duration-500">Shop</Link>
+                                                                            className=" font-bold text-xl text-text hover:text-cyan-500 duration-500">Shop</Link>
                                     </li>
                                     <li className="mx-4 my-6 md:my-0"><Link to="/blog"
-                                                                            className="text-medium font-bold text-xl text-text hover:text-cyan-500 duration-500">Blog</Link>
+                                                                            className=" font-bold text-xl text-text hover:text-cyan-500 duration-500">Blog</Link>
                                     </li>
                                     <li className="mx-4 my-6 md:my-0"><Link to="/contact-us"
-                                                                            className="text-medium font-bold text-xl text-text hover:text-cyan-500 duration-500">Contact Us</Link>
+                                                                            className=" font-bold  text-xl text-text hover:text-cyan-500 duration-500">Contact
+                                        Us</Link>
                                     </li>
 
                                 </ul>

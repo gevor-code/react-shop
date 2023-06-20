@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import Admin from "../Admin";
 import {toast} from "react-toastify";
-import { deleteProduct, getProd} from "../../../store/user";
+import {deleteProduct, getProducts} from "../../../store/user";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router";
 
@@ -10,11 +10,11 @@ const Products  = () => {
     const dispatch=useDispatch()
     const [product, setProduct] = useState([]);
     useEffect(() => {
-        getProducts();
+        getMyProducts();
     }, []);
-    const getProducts = async () => {
+    const getMyProducts = async () => {
         try {
-            const response = await dispatch(getProd());
+            const response = await dispatch(getProducts({callType:""}));
             if (response) {
                 setProduct(response);
             }
@@ -26,7 +26,7 @@ const Products  = () => {
     const delProduct = async (categoryId) => {
         try {
             await dispatch(deleteProduct(categoryId))
-            await getProducts();
+            await getMyProducts();
             toast.success('Deleted Successfully!');
         } catch (error) {
             toast.error(error.message);
