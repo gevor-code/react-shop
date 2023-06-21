@@ -91,11 +91,11 @@ export const getCateg = () => async (dispatch) => {
 };
 export const getProducts = (payload) => async (dispatch) => {
     try {
-        const categoryParams = payload.productByCategories?.map((category) => `category.category=${category}`).join("&");
+        let categoryParams = payload.productByCategories?.map((category) => `category.category=${category}`).join("&") ;
         let byPrice = payload.call !== true ? `_sort=special_price&_order=${payload.method?.sorting === "HighToLow" ? "desc" : "asc"}` : "";
         let byCategory = `_sort=product&_order=desc${payload.callType === "withCategory" ? `&${categoryParams}` : ""}`;
         let byRange = `special_price_gte=$${payload?.method?.range?.min}.00&special_price_lte=$${payload?.method?.range?.max}.00`
-        const response = await axios.get(`http://localhost:8081/product?${payload?.call === true ? byRange : payload.method?.type === "withPrice" && payload.callType == "checkbox" ? byPrice : payload.type == 'dontCall' ? byCategory : ""}`)
+        const response = await axios.get(`http://localhost:8081/product?${payload?.call === true ? byRange : payload.method?.type === "withPrice" && payload.callType === "checkbox" ? byPrice : payload.type === 'dontCall' ? byCategory : categoryParams}`)
         payload.setter?.(response.data)
         return response.data;
     } catch (err) {
