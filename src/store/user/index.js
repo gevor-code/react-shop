@@ -93,8 +93,6 @@ export const getProducts = (payload) => async (dispatch) => {
     try {
         let url = 'http://localhost:8081/product?'
 
-        console.log(payload,'payload')
-
         if (payload?.sorting){
             url += `_sort=special_price&_order=${payload?.sorting === "HighToLow" ? "desc" : "asc"}`
         }

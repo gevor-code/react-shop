@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch} from "react-redux";
-import {getProducts} from "../../store/user";
+import {getCateg, getProducts} from "../../store/user";
 import StarsComponent from "../../components/Homepage/StarsComponent";
 import {quantityCart} from "../../store/cart";
 import PriceRange from "../../components/Range/PriceRange";
@@ -8,10 +8,18 @@ import {toast} from "react-toastify";
 import Loader from "../../components/Loader/Loader";
 
 const Shop = () => {
+    const dispatch = useDispatch();
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState([]);
     const [isFilterMenuOpen, setFilterMenuOpen] = useState(false);
+    const [filter, setFilter] = useState({
+        sorting: null,
+        productByCategories: null,
+        range: null,
+    });
+
+
     const [isOpen, setIsOpen] = useState(false);
     const [price, setPrice] = useState([0, 20]);
     const [loader, setMyLoader] = useState(false)
@@ -20,8 +28,16 @@ const Shop = () => {
         {id: 2, label: "Price: Low to hight", checked: false}
     ])
 
-    const dispatch = useDispatch();
 
+    useEffect(() => {
+        fetchCategory()
+        fetchProducts();
+    }, []);
+
+
+    useEffect(() => {
+        fetchProducts();
+    }, [filter]);
 
     const handleFilterMenu = () => {
         setFilterMenuOpen(!isFilterMenuOpen);
@@ -36,33 +52,11 @@ const Shop = () => {
                 elm.id === obj.id ? {...elm, checked: !elm.checked} : {...elm, checked: false}
             )
         );
-
-        try {
-            setMyLoader(true);
-
-            if (price[0] === 0 && price[1] === 20) {
-                const checkBoxTemp = await dispatch(
-                    getProducts({
-                        sorting: obj.label === "Price: High to low" ? "HighToLow" : "LowToHigh"
-                    })
-                )
-                setProducts(checkBoxTemp)
-            } else {
-                setProducts((prev) =>
-                    prev.sort((x, y) => {
-                        const a = x.special_price.split("$").join("");
-                        const b = y.special_price.split("$").join("");
-                        return obj.label === "Price: High to low" ? b - a : a - b;
-                    })
-                );
-            }
-        } catch (error) {
-            toast.error(error);
-        } finally {
-            setMyLoader(false);
-            setIsOpen(!isOpen);
-        }
+        const sorting = obj.label === "Price: High to low" ? "HighToLow" : "LowToHigh";
+        setFilter({...filter, sorting: sorting});
+        setIsOpen(!isOpen);
     };
+
 
 
     const addToCart = (product) => {
@@ -78,14 +72,20 @@ const Shop = () => {
         }
     };
 
+    const fetchCategory = async () => {
+        try {
+            const dataCategory = await dispatch(getCateg())
+            console.log(dataCategory, "dataCategory")
+            setCategories(dataCategory)
+        } catch (error) {
+            toast.error(error)
+        }
+    }
     const fetchProducts = async () => {
         try {
             setMyLoader(true);
-            const data = await dispatch(getProducts({callType: ""}));
-            const sortedProducts = [...data];
-            setProducts(sortedProducts);
-            const prodCategories = [...new Set(sortedProducts.map((product) => product.category.category))];
-            setCategories(prodCategories);
+            const data = await dispatch(getProducts(filter));
+            setProducts(data);
         } catch (error) {
             toast.error(error);
         } finally {
@@ -106,10 +106,12 @@ const Shop = () => {
 
             const categoryTemp = await dispatch(
                 getProducts({
+                    ...filter,
                     productByCategories: updatedSelectedCategory,
                 })
-            )
-            setProducts(categoryTemp)
+            );
+            setFilter({...filter, productByCategories: updatedSelectedCategory});
+            setProducts(categoryTemp);
         } catch (error) {
             toast.error(error);
         } finally {
@@ -117,10 +119,21 @@ const Shop = () => {
         }
     };
 
+
     const clearSelect = async () => {
         try {
             setMyLoader(true)
             setSelectedCategory([]);
+            setCheckboxes([
+                {id: 1, label: "Price: High to low", checked: false},
+                {id: 2, label: "Price: Low to hight", checked: false}
+            ])
+            setPrice([0, 20])
+            setFilter({
+                sorting: null,
+                productByCategories: null,
+                range: null,
+            })
             const productData = await dispatch(getProducts({callType: ""}));
             setProducts(productData);
         } catch (error) {
@@ -130,10 +143,6 @@ const Shop = () => {
         }
     };
 
-
-    useEffect(() => {
-        fetchProducts();
-    }, []);
 
     return (
         <div className=" main-container shopDiv">
@@ -146,17 +155,17 @@ const Shop = () => {
                             <div className="flex items-center flex-col ">
                                     <ul className="xl:w-[140px] px-[1rem] py-[1rem] text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                         {categories.map((category) => (
-                                            <li key={category} className="flex items-center mb-4">
+                                            <li key={category.id} className="flex items-center mb-4">
                                                 <input
                                                     id={`category-${category}`}
                                                     type="checkbox"
                                                     className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                                    checked={selectedCategory.includes(category)}
-                                                    onChange={() => handleCategorySelection(category)}
+                                                    checked={selectedCategory.includes(category.category)}
+                                                    onChange={() => handleCategorySelection(category.category)}
                                                 />
-                                                <label htmlFor={`category-${category}`}
+                                                <label htmlFor={`category-${category.category}`}
                                                        className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                                                    {category}
+                                                    {category.category}
                                                 </label>
                                             </li>
                                         ))}
@@ -176,7 +185,8 @@ const Shop = () => {
                         </div>
 
                     </div>
-                    <PriceRange values={price} setValues={setPrice} setter={setProducts} loader={setMyLoader}/>
+                    <PriceRange filter={filter} setFilterHandler={setFilter} values={price} setValues={setPrice}
+                                setter={setProducts} loader={setMyLoader}/>
                 </div>
 
                 <div>

@@ -5,24 +5,26 @@ import {useDispatch} from "react-redux";
 import {getProducts} from "../../store/user";
 import {toast} from "react-toastify";
 
-const PriceRange = ({values, setValues, setter, loader}) => {
+const PriceRange = ({filter, setFilterHandler, values, setValues, setter, loader}) => {
     const dispatch = useDispatch()
     const handleRangeChange = async (newValues) => {
+        const range = {
+            min: newValues[0],
+            max: newValues[1],
+        }
+
         setValues(newValues);
+        setFilterHandler({...filter, range});
         loader(true);
 
         try {
-            setTimeout(async()=>{
+            setTimeout(async () => {
                 const temp = await dispatch(
-                    getProducts({
-                        range: {
-                            min: newValues[0],
-                            max: newValues[1],
-                        }
-                    })
+                    getProducts(range)
                 );
+
                 setter(temp)
-            },500)
+            }, 500)
         } catch (error) {
             toast.error(error);
         } finally {
