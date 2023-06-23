@@ -31,28 +31,39 @@ const Shop = () => {
     };
 
     const handleChange = async (obj) => {
-        setCheckboxes(checkboxes.map(elm => elm.id === obj.id ? {...elm, checked: !elm.checked} : {
-            ...elm,
-            checked: false
-        }))
-        if (price[0] === 0 && price[1] === 20) {
-            dispatch(getProducts({
-                callType: "checkbox",
-                call: false,
-                method: {type: "withPrice", sorting: obj.label === "Price: High to low" ? "HighToLow" : ""},
-                setter: setProducts
-            }))
-        } else {
-            setProducts(prev => prev.sort((x, y) => {
-                const a = x.special_price.split("$").join("")
-                const b = y.special_price.split("$").join("")
-                return obj.label === "Price: High to low" ? b - a : a - b
+        setCheckboxes(
+            checkboxes.map((elm) =>
+                elm.id === obj.id ? {...elm, checked: !elm.checked} : {...elm, checked: false}
+            )
+        );
 
-            }))
+        try {
+            setMyLoader(true);
+
+            if (price[0] === 0 && price[1] === 20) {
+                const checkBoxTemp = await dispatch(
+                    getProducts({
+                        sorting: obj.label === "Price: High to low" ? "HighToLow" : "LowToHigh"
+                    })
+                )
+                setProducts(checkBoxTemp)
+            } else {
+                setProducts((prev) =>
+                    prev.sort((x, y) => {
+                        const a = x.special_price.split("$").join("");
+                        const b = y.special_price.split("$").join("");
+                        return obj.label === "Price: High to low" ? b - a : a - b;
+                    })
+                );
+            }
+        } catch (error) {
+            toast.error(error);
+        } finally {
+            setMyLoader(false);
+            setIsOpen(!isOpen);
         }
-        setIsOpen(!isOpen)
+    };
 
-    }
 
     const addToCart = (product) => {
         try {
@@ -93,14 +104,12 @@ const Shop = () => {
         try {
             setMyLoader(true);
 
-            await dispatch(
+            const categoryTemp = await dispatch(
                 getProducts({
-                    type: "call",
                     productByCategories: updatedSelectedCategory,
-                    method: "withPrice",
-                    setter: setProducts,
                 })
-            );
+            )
+            setProducts(categoryTemp)
         } catch (error) {
             toast.error(error);
         } finally {
@@ -152,7 +161,7 @@ const Shop = () => {
                                             </li>
                                         ))}
                                     </ul>
-                                {selectedCategory.length > 0 && (
+                                {selectedCategory.length > 0 ? (
                                     <div className="flex mt-2">
                                         <button
                                             className="text-sm text-white px-[1rem] py-[8px] bg-[#374151] hover:bg-[#0c3c60] transition duration-300 cursor-pointer"
@@ -160,14 +169,14 @@ const Shop = () => {
                                             Clear All
                                         </button>
                                     </div>
-                                )}
+                                ) : null}
 
                             </div>
 
                         </div>
 
                     </div>
-                    <PriceRange values={price} setValues={setPrice} setter={setProducts}/>
+                    <PriceRange values={price} setValues={setPrice} setter={setProducts} loader={setMyLoader}/>
                 </div>
 
                 <div>
@@ -210,7 +219,7 @@ const Shop = () => {
                       )}
                     </span>
                         </button>
-                        {isOpen && (
+                        {isOpen ? (
                             <div
                                 className="flex sortByContent justify-center sm:justify-end md:justify-end lg:justify-end xl:justify-end absolute top-[3rem] left-0 right-0 ">
                                 <div
@@ -241,7 +250,7 @@ const Shop = () => {
                                     </ul>
                                 </div>
                             </div>
-                        )}
+                        ) : null}
                     </div>
 
                     {loader ? (
@@ -274,9 +283,9 @@ const Shop = () => {
                                                 className="px-2 pb-4 flex justify-center sm:justify-center md:justify-center md:flex-wrap lg:flex-wrap lg:justify-center xl:flex-nowrap ">
                                                 <div className="flex">
                                         <span
-                                            className="rounded-full text-[#B8B8B8] mr-2 line-through ">{product.price}</span>
+                                            className="rounded-full text-[#B8B8B8] mr-2 line-through ">${product.price.toFixed(2)}</span>
                                                     <span
-                                                        className="text-[#274C5B] font-bold font-[Open Sans] ">{product.special_price}</span>
+                                                        className="text-[#274C5B] font-bold font-[Open Sans] ">${product.special_price.toFixed(2)}</span>
                                                 </div>
                                                 <div className="flex items-center">
                                                     <StarsComponent/>
@@ -306,7 +315,7 @@ const Shop = () => {
                                 Filter Menu
                             </button>
                         </div>
-                        {isFilterMenuOpen && (
+                        {isFilterMenuOpen ? (
                             <div
                                 className="fixed top-0 right-0 bottom-0 w-[300px]  bg-gray-300 shadow-lg transition-all duration-300  filterMenu filterMenuContainer">
                                 <div className="mt-[7rem]">
@@ -321,40 +330,39 @@ const Shop = () => {
                                                             <input
                                                                 id={`category-${category}`}
                                                                 type="checkbox"
-                                                                multiple
                                                                 className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                                                checked={selectedCategory.includes(category)}
                                                                 onChange={() => handleCategorySelection(category)}
-                                                                checked={selectedCategory === category}
                                                             />
-                                                            <label
-                                                                htmlFor={`category-${category}`}
-                                                                className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                                                            >
+                                                            <label htmlFor={`category-${category}`}
+                                                                   className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                                                                 {category}
                                                             </label>
                                                         </li>
                                                     ))}
                                                 </ul>
-
-                                                {selectedCategory && (
-                                                    <div className="flex mt-4 ml-[0.5rem]">
+                                                {selectedCategory.length > 0 ? (
+                                                    <div className="flex mt-2">
                                                         <button
-                                                            className="  text-sm text-white px-[1rem] py-[8px] bg-[#374151] hover:bg-[#0c3c60] transition duration-300 cursor-pointer"
-                                                            onClick={() => setSelectedCategory("")}
-                                                        >
+                                                            className="text-sm text-white px-[1rem] py-[8px] bg-[#374151] hover:bg-[#0c3c60] transition duration-300 cursor-pointer"
+                                                            onClick={() => clearSelect()}>
                                                             Clear All
                                                         </button>
                                                     </div>
-                                                )}
+                                                ) : null}
+
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                {/*<div className="rangeDiv relative">*/}
-                                    <PriceRange values={price} setValues={setPrice} setter={setProducts}/>
-                                {/*</div>*/}
+                                <div>
+                                    <PriceRange values={price} setValues={setPrice} setter={setProducts}
+                                                loader={setMyLoader}/>
+
+                                </div>
+
                             </div>
-                        )}
+                        ) : null}
 
                     </div>
                 </div>

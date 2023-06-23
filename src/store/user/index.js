@@ -91,12 +91,25 @@ export const getCateg = () => async (dispatch) => {
 };
 export const getProducts = (payload) => async (dispatch) => {
     try {
-        let categoryParams = payload.productByCategories?.map((category) => `category.category=${category}`).join("&") ;
-        let byPrice = payload.call !== true ? `_sort=special_price&_order=${payload.method?.sorting === "HighToLow" ? "desc" : "asc"}` : "";
-        let byCategory = `_sort=product&_order=desc${payload.callType === "withCategory" ? `&${categoryParams}` : ""}`;
-        let byRange = `special_price_gte=$${payload?.method?.range?.min}.00&special_price_lte=$${payload?.method?.range?.max}.00`
-        const response = await axios.get(`http://localhost:8081/product?${payload?.call === true ? byRange : payload.method?.type === "withPrice" && payload.callType === "checkbox" ? byPrice : payload.type === 'dontCall' ? byCategory : categoryParams}`)
-        payload.setter?.(response.data)
+        let url = 'http://localhost:8081/product?'
+
+        console.log(payload,'payload')
+
+        if (payload?.sorting){
+            url += `_sort=special_price&_order=${payload?.sorting === "HighToLow" ? "desc" : "asc"}`
+        }
+
+        if (payload.productByCategories) {
+            let categoryParams = payload.productByCategories?.map((category) => `category.category=${category}`).join("&");
+            url += `&${categoryParams}`
+        }
+
+        if(payload?.range){
+            let sortByRange = `special_price_gte=${payload?.range?.min}&special_price_lte=${payload?.range?.max}`
+            url += `&${sortByRange}`
+        }
+
+        const response = await axios.get(url)
         return response.data;
     } catch (err) {
         toast.error(err.message);
