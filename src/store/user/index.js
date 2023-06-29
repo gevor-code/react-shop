@@ -103,7 +103,7 @@ export const getProducts = (payload) => async (dispatch) => {
             url += `&${categoryParams}`
         }
         if (payload?.category) {
-            url += `category.category=Vegetable&`
+            url += `_limit=4&category.category=${payload?.category}`
         }
 
         if (payload?.range) {

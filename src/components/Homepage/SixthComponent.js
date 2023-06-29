@@ -45,7 +45,7 @@ const SixthComponent = () => {
                 </div>
 
                 <div className="flex justify-center flex-wrap lg:gap-14 xl:grid-cols-4 gap-6  mt-8 ">
-                    {product?.slice(0, 4)?.map((product) => (
+                    {product?.map((product) => (
                         <div className="imgPart" key={product.id}>
                             <div className="overflow-hidden shadow-lg rounded-sm bg-[#f9f8f8]">
                                 <div className=" m-7">
