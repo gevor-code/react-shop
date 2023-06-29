@@ -1,6 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit'
 import axios from "axios";
 import {toast} from "react-toastify";
+import {filter} from "ionicons/icons";
 
 // Actions
 // Example of action
@@ -93,7 +94,7 @@ export const getProducts = (payload) => async (dispatch) => {
     try {
         let url = 'http://localhost:8081/product?'
 
-        if (payload?.sorting){
+        if (payload?.sorting) {
             url += `_sort=special_price&_order=${payload?.sorting === "HighToLow" ? "desc" : "asc"}`
         }
 
@@ -101,10 +102,17 @@ export const getProducts = (payload) => async (dispatch) => {
             let categoryParams = payload.productByCategories?.map((category) => `category.category=${category}`).join("&");
             url += `&${categoryParams}`
         }
+        if (payload?.category) {
+            url += `category.category=Vegetable&`
+        }
 
-        if(payload?.range){
+        if (payload?.range) {
             let sortByRange = `special_price_gte=${payload?.range?.min}&special_price_lte=${payload?.range?.max}`
             url += `&${sortByRange}`
+        }
+        if (payload.search) {
+            let productSearch = `title_like=${payload.search}`;
+            url += `&${productSearch}`;
         }
 
         const response = await axios.get(url)
@@ -113,6 +121,14 @@ export const getProducts = (payload) => async (dispatch) => {
         toast.error(err.message);
     }
 };
+export const searchProduct = (payload) => async (dispatch) => {
+    try {
+        const response = await axios.get(`http://localhost:8081/product?title_like=${payload.search}`)
+        return response.data
+    } catch (error) {
+        toast.error(error.message)
+    }
+}
 export const deleteCategory = (categoryId) => async (dispatch) => {
     try {
         const response = await axios.delete(`http://localhost:8081/categories/${categoryId}`)
@@ -145,14 +161,15 @@ export const productCategory = (productId) => async (dispatch) => {
         toast.error(error.message)
     }
 }
-export const getProductId=(productId)=>async(dispatch)=>{
-    try{
-        const resp=await axios.get(`http://localhost:8081/product/${productId}`)
+export const getProductId = (productId) => async (dispatch) => {
+    try {
+        const resp = await axios.get(`http://localhost:8081/product/${productId}`)
         return resp.data
-    }catch(error){
+    } catch (error) {
         toast.error(error.message)
     }
 }
+
 export const getCategoryId = (categoryId) => async (dispatch) => {
     try {
         const resp = await axios.get(`http://localhost:8081/categories/${categoryId}`)

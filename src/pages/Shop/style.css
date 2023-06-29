@@ -1,0 +1,13 @@
+@media (max-width: 440px) {
+    .productDiv{
+           align-items:center!important;
+            padding-right: 0!important;
+            padding-left: 0!important;
+        gap: 1rem;
+    }
+    .productInfoDiv{
+flex-direction: column;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+}

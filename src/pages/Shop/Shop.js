@@ -1,18 +1,22 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {useDispatch} from "react-redux";
-import {getCateg, getProducts} from "../../store/user";
+import {getCateg, getProductId, getProducts} from "../../store/user";
 import StarsComponent from "../../components/Homepage/StarsComponent";
 import {quantityCart} from "../../store/cart";
 import PriceRange from "../../components/Range/PriceRange";
 import {toast} from "react-toastify";
 import Loader from "../../components/Loader/Loader";
+import {useNavigate} from "react-router";
 
 const Shop = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate()
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState([]);
     const [isFilterMenuOpen, setFilterMenuOpen] = useState(false);
+    const divRef = useRef(null);
+
     const [filter, setFilter] = useState({
         sorting: null,
         productByCategories: null,
@@ -31,7 +35,6 @@ const Shop = () => {
 
     useEffect(() => {
         fetchCategory()
-        fetchProducts();
     }, []);
 
 
@@ -67,6 +70,8 @@ const Shop = () => {
             localStorage.setItem('cart', JSON.stringify(updatedCart));
             const currentCount = cartCount + 1;
             dispatch(quantityCart(currentCount))
+            toast.success('Successfully Added');
+
         } catch (error) {
             toast.error(error)
         }
@@ -75,7 +80,6 @@ const Shop = () => {
     const fetchCategory = async () => {
         try {
             const dataCategory = await dispatch(getCateg())
-            console.log(dataCategory, "dataCategory")
             setCategories(dataCategory)
         } catch (error) {
             toast.error(error)
@@ -98,52 +102,45 @@ const Shop = () => {
         const updatedSelectedCategory = selectedCategory.includes(category)
             ? selectedCategory.filter((data) => data !== category)
             : [...selectedCategory, category];
-
         setSelectedCategory(updatedSelectedCategory);
-
-        try {
-            setMyLoader(true);
-
-            const categoryTemp = await dispatch(
-                getProducts({
-                    ...filter,
-                    productByCategories: updatedSelectedCategory,
-                })
-            );
-            setFilter({...filter, productByCategories: updatedSelectedCategory});
-            setProducts(categoryTemp);
-        } catch (error) {
-            toast.error(error);
-        } finally {
-            setMyLoader(false);
-        }
-    };
+        setFilter({...filter, productByCategories: updatedSelectedCategory});
+    }
 
 
     const clearSelect = async () => {
+        setSelectedCategory([]);
+        setCheckboxes([
+            {id: 1, label: "Price: High to low", checked: false},
+            {id: 2, label: "Price: Low to hight", checked: false}
+        ])
+        setPrice([0, 20])
+        setFilter({
+            sorting: null,
+            productByCategories: null,
+            range: null,
+        })
+    };
+
+    const productDetail = async (productId) => {
         try {
-            setMyLoader(true)
-            setSelectedCategory([]);
-            setCheckboxes([
-                {id: 1, label: "Price: High to low", checked: false},
-                {id: 2, label: "Price: Low to hight", checked: false}
-            ])
-            setPrice([0, 20])
-            setFilter({
-                sorting: null,
-                productByCategories: null,
-                range: null,
-            })
-            const productData = await dispatch(getProducts({callType: ""}));
-            setProducts(productData);
+            navigate(`/shop/${productId}`);
         } catch (error) {
-            console.error(error.message);
-        } finally {
-            setMyLoader(false)
+            toast.error(error.message);
         }
     };
 
+    const handleClickOutside = (event) => {
+        if (divRef.current && !divRef.current.contains(event.target)) {
+            setIsOpen(false);
+        }
+    };
+    useEffect(() => {
+        document.addEventListener('click', handleClickOutside);
 
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
+    }, []);
     return (
         <div className=" main-container shopDiv">
             <div className="flex my-[5rem]  sm:gap-[25px] md:gap-[16px] lg:gap-[14px] xl:gap-[25px] ">
@@ -153,23 +150,23 @@ const Shop = () => {
                             className=" flex items-center justify-center gap-3 text-2xl font-semibold mb-4">Filters</span>
                         <div className="flex flex-col mt-4">
                             <div className="flex items-center flex-col ">
-                                    <ul className="xl:w-[140px] px-[1rem] py-[1rem] text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                        {categories.map((category) => (
-                                            <li key={category.id} className="flex items-center mb-4">
-                                                <input
-                                                    id={`category-${category}`}
-                                                    type="checkbox"
-                                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                                    checked={selectedCategory.includes(category.category)}
-                                                    onChange={() => handleCategorySelection(category.category)}
-                                                />
-                                                <label htmlFor={`category-${category.category}`}
-                                                       className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                                                    {category.category}
-                                                </label>
-                                            </li>
-                                        ))}
-                                    </ul>
+                                <ul className="xl:w-[140px] px-[1rem] py-[1rem] text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    {categories.map((category) => (
+                                        <li key={category.id} className="flex items-center mb-4">
+                                            <input
+                                                id={`category-${category}`}
+                                                type="checkbox"
+                                                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                                checked={selectedCategory.includes(category.category)}
+                                                onChange={() => handleCategorySelection(category.category)}
+                                            />
+                                            <label htmlFor={`category-${category.category}`}
+                                                   className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                                {category.category}
+                                            </label>
+                                        </li>
+                                    ))}
+                                </ul>
                                 {selectedCategory.length > 0 ? (
                                     <div className="flex mt-2">
                                         <button
@@ -185,11 +182,10 @@ const Shop = () => {
                         </div>
 
                     </div>
-                    <PriceRange filter={filter} setFilterHandler={setFilter} values={price} setValues={setPrice}
-                                setter={setProducts} loader={setMyLoader}/>
+                    <PriceRange filter={filter} setFilterHandler={setFilter} values={price} setValues={setPrice}/>
                 </div>
 
-                <div>
+                <div className="w-[100%]" ref={divRef}>
                     <div
                         className="flex  sortByDiv sm:justify-end  md:justify-end lg:justify-end xl:justify-end relative">
                         <button
@@ -276,10 +272,12 @@ const Shop = () => {
                                         <div key={index}
                                              className="max-w-full sm:max-w-sm md:max-w-sm lg:max-w-sm xl:max-w-sm overflow-hidden shadow-lg rounded-[2rem] shopPart bg-[#f9f8f8]  ">
                                             <div className=" m-7">
-                        <span
-                            className="text-white bg-[#274C5B]  leading-5 font-[Opens Sans] text-sm font-semibold pl-6 pr-6 pt-2 pb-2 rounded  ">{product?.category.category}</span>
+                                                <span
+                                                    className="text-white bg-[#274C5B]  leading-5 font-[Opens Sans] text-sm font-semibold pl-6 pr-6 pt-2 pb-2 rounded  ">{product?.category.category}</span>
                                             </div>
-                                            <div className="flex w-full justify-center">
+                                            <div className="flex w-full justify-center"
+                                                 onClick={() => productDetail(product.id)}
+                                            >
                                                 <img className=" w-96 sm:h-64 md:h-64 lg:h-[17rem] xl:h-[17rem]"
                                                      src={image}
                                                      alt=""/>
@@ -292,8 +290,8 @@ const Shop = () => {
                                             <div
                                                 className="px-2 pb-4 flex justify-center sm:justify-center md:justify-center md:flex-wrap lg:flex-wrap lg:justify-center xl:flex-nowrap ">
                                                 <div className="flex">
-                                        <span
-                                            className="rounded-full text-[#B8B8B8] mr-2 line-through ">${product.price.toFixed(2)}</span>
+                                                    <span
+                                                        className="rounded-full text-[#B8B8B8] mr-2 line-through ">${product.price.toFixed(2)}</span>
                                                     <span
                                                         className="text-[#274C5B] font-bold font-[Open Sans] ">${product.special_price.toFixed(2)}</span>
                                                 </div>
@@ -338,7 +336,7 @@ const Shop = () => {
                                                     {categories.map((category) => (
                                                         <li key={category} className="flex items-center mb-4">
                                                             <input
-                                                                id={`category-${category}`}
+                                                                id={`category-${category.category}`}
                                                                 type="checkbox"
                                                                 className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                                                                 checked={selectedCategory.includes(category)}
@@ -346,7 +344,7 @@ const Shop = () => {
                                                             />
                                                             <label htmlFor={`category-${category}`}
                                                                    className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                                                                {category}
+                                                                {category.category}
                                                             </label>
                                                         </li>
                                                     ))}
@@ -368,7 +366,6 @@ const Shop = () => {
                                 <div>
                                     <PriceRange values={price} setValues={setPrice} setter={setProducts}
                                                 loader={setMyLoader}/>
-
                                 </div>
 
                             </div>

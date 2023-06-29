@@ -1,39 +1,17 @@
 import React from 'react';
 import '../../components/Range/style.css'
 import {getTrackBackground, Range} from "react-range";
-import {useDispatch} from "react-redux";
-import {getProducts} from "../../store/user";
-import {toast} from "react-toastify";
 
-const PriceRange = ({filter, setFilterHandler, values, setValues, setter, loader}) => {
-    const dispatch = useDispatch()
+const PriceRange = ({filter, setFilterHandler, values, setValues,}) => {
+
     const handleRangeChange = async (newValues) => {
         const range = {
             min: newValues[0],
             max: newValues[1],
         }
-
         setValues(newValues);
         setFilterHandler({...filter, range});
-        loader(true);
-
-        try {
-            setTimeout(async () => {
-                const temp = await dispatch(
-                    getProducts(range)
-                );
-
-                setter(temp)
-            }, 500)
-        } catch (error) {
-            toast.error(error);
-        } finally {
-            loader(false);
-        }
-    };
-
-
-
+    }
 
     return (
         <div

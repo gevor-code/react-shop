@@ -4,10 +4,15 @@ import HeaderLogo from "../../assets/svg/HeaderLogo";
 import {useCookies} from "react-cookie";
 import {useDispatch, useSelector,} from "react-redux";
 import {quantityCart} from "../../store/cart";
+import {searchProduct} from "../../store/user";
+import StarsComponent from "../../components/Homepage/StarsComponent";
+import {useNavigate} from "react-router";
+import {toast} from "react-toastify";
 
 const Navbar = () => {
     const dispatch = useDispatch()
     const cartItemCount = useSelector((state) => state.cart.quantity);
+    const navigate = useNavigate()
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -15,6 +20,44 @@ const Navbar = () => {
     const [isCartOpen, setIsCartOpen] = useState(false);
     const divRef = useRef(null);
     const [cookies, removeCookie] = useCookies(['userData'])
+    const [searchQuery, setSearchQuery] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
+    const [showSearchResults, setShowSearchResults] = useState(false);
+
+    useEffect(() => {
+        if (searchQuery.length >= 3) {
+            fetchSearchResults();
+        } else {
+            setSearchResults([])
+            setShowSearchResults(false);
+        }
+    }, [searchQuery]);
+
+    const fetchSearchResults = async () => {
+        try {
+            const response = await dispatch(searchProduct({search: searchQuery}));
+            setSearchResults(response);
+            setShowSearchResults(true)
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const handleSearchChange = (e) => {
+        setSearchQuery(e.target.value)
+        setShowSearchResults(false);
+    };
+
+    const handleSearchSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            dispatch(searchProduct({search: searchQuery}));
+            setSearchQuery('');
+            setShowSearchResults(true);
+        } catch (error) {
+            toast.error(error.message)
+        }
+    };
 
     useEffect(() => {
         const storedCart = localStorage.getItem("cart");
@@ -59,9 +102,17 @@ const Navbar = () => {
             localStorage.setItem("cart", JSON.stringify(updatedCart));
             const updatedCartCount = updatedCart.length;
             dispatch(quantityCart(updatedCartCount));
+            toast.error('Deleted');
+
         }
 
     };
+    const handleClickProduct = (productId, product) => {
+        navigate(`/shop/${productId}`, {state: product});
+        setShowSearchResults(false)
+        setSearchQuery("")
+
+    }
 
     return (
         <div className=" bg-white shadow-xl sticky z-10 top-0">
@@ -147,18 +198,80 @@ const Navbar = () => {
                                             </div>
 
 
-                                            : null
-                                        }
+                                            : null}
                                     </div>
                                 </div>
                                 <div className="flex justify-end relative items-center">
-                                    <input
-                                        className="bg-semiWhite  h-input3 sm:h-input rounded-md  w-[8rem] sm:w-48 md:w-48 lg:w-48 pl-[16px] xl:w-48 md:w-input"/>
+                                    <input value={searchQuery}
+                                           onChange={handleSearchChange}
+                                           className="bg-semiWhite  h-input3 sm:h-input rounded-md  w-[8rem] sm:w-48 md:w-48 lg:w-48 pl-[16px] xl:w-48 md:w-input"
+                                           placeholder="Search..."/>
                                     <div
                                         className="bg-lightGreen flex justify-center items-center rounded-brFull w-circle3 h-circle3 sm:w-circle2 sm:h-circle2 md:w-circle2 md:h-circle2 lg:w-circle2 lg:h-circle2 xl:h-circle2 xl:w-circle2 absolute mr-2">
-                                        <img src="/assets/images/search.svg" width="57" height="56" alt=""/>
+                                        <button type="submit" onClick={handleSearchSubmit}>
+                                            <img src="/assets/images/search.svg" width="57" height="56" alt=""/>
+                                        </button>
+
+                                        {searchResults && searchQuery.length >= 3 && showSearchResults ? (
+                                            <div
+                                                className="z-10 absolute right-[-130%] top-[175%] sm:top-[150%] sm:right-[-24%] md:right-[-24%] md:top-[150%] lg:right-[-26%] lg:top-[150%] xl:right-[-60%] xl:top-[150%]">
+                                                {searchResults.length > 0 ? (
+                                                    searchResults.map((product) => (
+                                                        <div key={product.id}>
+                                                            {product.images.map((image, index) => (
+                                                                <div
+                                                                    key={index}
+                                                                    onClick={() => handleClickProduct(product.id, product)}
+                                                                    className="overflow-hidden flex items-baseline gap-4 bg-[#f9f8f8] h-[14rem] sm:h-[14rem] md:h-[14rem] lg:h-[14rem] xl:h-[14rem] w-[100%]"
+                                                                >
+                                                                    <div>
+                                                                        <div className="mt-[3rem] ml-[1rem]">
+                          <span
+                              className="text-white bg-[#274C5B] leading-5 font-[Opens Sans] text-sm font-semibold pl-6 pr-6 pt-2 pb-2 rounded">
+                            {product?.category.category}
+                          </span>
+                                                                            <img src={image} alt=""/>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="flex flex-col gap-4 mx-10">
+                                                                        <div
+                                                                            className="text-xl gap-4 text-[#274C5B] text-center font-semibold leading-6 font-[Roboto]">
+                                                                            {product.title}
+                                                                        </div>
+                                                                        <div
+                                                                            className="flex flex-col gap-4 items-center">
+                                                                            <div className="flex">
+                            <span className="rounded-full text-[#B8B8B8] mr-2 line-through">
+                              ${product.price.toFixed(2)}
+                            </span>
+                                                                                <span
+                                                                                    className="text-[#274C5B] font-bold font-[Open Sans]">
+                              ${product.special_price.toFixed(2)}
+                            </span>
+                                                                            </div>
+                                                                            <div className="flex items-center">
+                                                                                <StarsComponent/>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    ))
+                                                ) : (
+                                                    <div
+                                                        className="flex justify-center items-center absolute w-[16rem] right-[-130%] top-[175%] sm:top-[150%] sm:right-[-24%] md:right-[-24%] md:top-[150%] lg:right-[-26%] lg:top-[150%] xl:right-[-60%] xl:top-[150%] z-10 bg-[#f9f8f8] h-[6rem] shadow-lg rounded-[1rem]">
+                <span className="text-xl font-bold italic font-[Roboto] text-[#274C5B]">
+                  Oops! No result found
+                </span>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        ) : null}
                                     </div>
+
                                 </div>
+
                                 <div className="relative">
                                     <div
                                         className="h-input3 sm:h-input md:h-input lg:h-input xl:h-input border border-border rounded-md flex justify-evenly items-center">
@@ -206,7 +319,8 @@ const Navbar = () => {
                                                             <div key={index}>
                                                                 <div
                                                                     className="flex items-center gap-8 sm:gap-8 md:gap-8 lg:gap-8 xl:gap-8 2xl:gap-8 cartGap">
-                                                                    <img src={item.images} width="100px" height="200px"
+                                                                    <img src={item.images} width="100px"
+                                                                         height="200px"
                                                                          className="rounded-[2rem]" alt=""/>
                                                                     <div>
                                                                         <p className="font-[Roboto] text-[23px]  sm:text-[29px] md:text-[29px] lg:text-[29px] xl:text-[29px] 2xl:text-[29px] text-white font-extrabold cartText openCartText">{item.title}</p>
