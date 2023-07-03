@@ -20,6 +20,7 @@ import BlogEdit from "../pages/Admin/BlogList/BlogEdit";
 import BlogPage from "../pages/Blog/BlogPage";
 import BlogInfo from "../pages/Admin/BlogList/BlogInfo";
 import ContactUs from "../pages/ContactUs/ContactUs";
+import SingleProductDetail from "../pages/Shop/SingleProductDetail";
 
 
 export const router = createBrowserRouter(
@@ -28,6 +29,7 @@ export const router = createBrowserRouter(
             <Route path="" element={<Layout><Home/></Layout>}/>
             <Route path="about" element={<Layout><About/></Layout>}/>
             <Route path="shop" element={<Layout><Shop/></Layout>}/>
+            <Route path="shop/:id" element={<Layout><SingleProductDetail/></Layout>}/>
             <Route path="blog" element={<Layout><BlogPage/></Layout>}/>
             <Route path="contact-us" element={<Layout><ContactUs/></Layout>}/>
             <Route path="signin" element={<Layout><SignIn/></Layout>}/>

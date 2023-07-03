@@ -1,36 +1,32 @@
 import React from 'react';
 import '../../components/Range/style.css'
 import {getTrackBackground, Range} from "react-range";
-import {useDispatch} from "react-redux";
-import {getProducts} from "../../store/user";
 
-const PriceRange = ({values, setValues, setter}) => {
-    const dispatch = useDispatch()
+const PriceRange = ({filter, setFilterHandler, values, setValues,}) => {
+
+    const handleRangeChange = async (newValues) => {
+        const range = {
+            min: newValues[0],
+            max: newValues[1],
+        }
+        setValues(newValues);
+        setFilterHandler({...filter, range});
+    }
+
     return (
-        <div className="items-center justify-center xl:flex lg:flex md:flex sm:flex hidden flex-col mt-[2rem] ">
+        <div
+            className="items-center justify-center xl:flex lg:flex md:flex sm:flex hidden   flex-col mt-[2rem] ">
             <Range
                 values={values}
                 step={1}
                 min={0}
                 max={20}
-                onChange={(newValues) => setValues(newValues)}
+                onChange={(newValues) => handleRangeChange(newValues)}
                 renderTrack={({props, children}) => (
                     <div
                         onMouseDown={props.onMouseDown}
                         onTouchStart={props.onTouchStart}
-                        onMouseUpCapture={() => dispatch(getProducts({
-                            method: {
-                                range: {
-                                    min: values[0],
-                                    max: values[1]
-                                }
-                            },
-                            call: true,
-                            callType: "",
-                            setter: setter,
-                            sorting: "okay",
-                            type: "dontCall"
-                        }))}
+                        onMouseUpCapture={(newValues) => handleRangeChange(newValues)}
                         style={{
                             ...props.style,
                             height: "6px",
