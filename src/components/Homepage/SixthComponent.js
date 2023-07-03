@@ -18,7 +18,6 @@ const SixthComponent = () => {
         try {
             const productData = await dispatch(getProducts({category: "Vegetable"}))
             setProduct(productData)
-            console.log(productData, "veganProd")
         } catch (error) {
             toast.error(error.message)
         }

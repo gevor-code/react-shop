@@ -20,7 +20,6 @@ const SingleProductDetail = () => {
         try {
             const productData = await dispatch(getProductId(id))
             setProduct(productData)
-            console.log(productData, "productData")
         } catch (error) {
             toast.error(error.message)
         }
